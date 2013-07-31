@@ -83,8 +83,15 @@ table {
 a {
 	cursor: pointer;
 }
-a:hover {
+a:hover, footer a:hover {
 	text-decoration: none;
+}
+footer a {
+	color: #FFFFFF;
+}
+footer a:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
 }
 .modal-title {
 	color: #999999;
