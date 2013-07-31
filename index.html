@@ -1,70 +1,275 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="chrome=1">
-	<title>Simple contact manager using IndexedDb</title>
-	<link rel="stylesheet" href="stylesheets/styles.css">
-	<link rel="stylesheet" href="stylesheets/pygment_trac.css">
-	<script src="javascripts/respond.js"></script>
-	<!--[if lt IE 9]>
-	  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" href="stylesheets/ie.css">
-	<![endif]-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta charset=utf-8>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="a simple html5 based contact manager using IndexedDB and twitter bootstrap" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Simple Contact Manager</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-glyphicons.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
-	<div id="header">
-		<nav>
-			<li class="fork"><a href="https://github.com/shibbir/SimpleContactManager">View On GitHub</a></li>
-			<li class="downloads"><a href="https://github.com/shibbir/SimpleContactManager/zipball/master">ZIP</a></li>
-			<li class="downloads"><a href="https://github.com/shibbir/SimpleContactManager/tarball/master">TAR</a></li>
-			<li class="title">DOWNLOADS</li>
-		</nav>
-	</div><!-- end header -->
+    <div id="container-wrapper" class="container">
+        <header>
+            <h2>A simple HTML5 based contact manager</h2>
+            <h4>HTML5, IndexedDB, Twitter Bootstrap, Handlebars</h4>
+        </header>
+        <a class="btn btn-primary" data-target="#ModalContactGroupAdd" data-toggle="modal">
+            <span class="glyphicon glyphicon-plus"></span>
+            Create a group
+        </a>
+        <a class="btn btn-primary" data-target="#ModalContactAdd" data-toggle="modal">
+            <span class="glyphicon glyphicon-plus"></span>
+            Create Contact
+        </a>
+        <div id="content-wrapper" class="row-fluid">
+            <div class="col-12 col-sm-12 col-lg-3 flat">
+                <div id="placeholder-groups"></div>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-8 col-offset-1 flat">
+                <div id="placeholder-contacts"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="container">
+         Copyright &copy; 2013 <a href="http://shibbir.net/" target="blank">Shibbir Ahmed.</a> All rights reserved.
+    </footer>
 
-	<div class="wrapper">
-		<section>
-			<div class="title">
-				<h1>Simple Contact Manager</h1>
-				<p>HTML5, IndexedDB, Twitter Bootstrap, Handlebars</p>
-				<hr />
-			</div>
-			
-			<a href="./demo/index.html">
-				<div id="demo">Demo</div>
-			</a>
+    <div id="ModalContactAdd" class="modal fade" data-backdrop="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="contact-add-form">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add a contact</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-add-contact"></div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="FirstName" placeholder="First Name *" required data-maxlength="15" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="LastName" placeholder="Last Name *" required data-maxlength="15" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="Mobile" placeholder="Mobile *" required data-minlength="8" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="Phone" placeholder="Phone" data-type="phone" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="Email" placeholder="Email *" required />
+                        </div>
 
-			<h1>
-				<a name="simplecontactmanager" class="anchor" href="#simplecontactmanager"><span class="octicon octicon-link"></span></a>SimpleContactManager
-			</h1>
+                        <div class="placeholder-group-dropdown"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addContact">Add Contact</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-			<p>A super simple HTML5 based contact manager using html5 indexedDb</p>
+    <div id="ModalContactEdit" class="modal fade" data-backdrop="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="contact-edit-form">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Update contact</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-edit-contact"></div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="EditFirstName" placeholder="First Name *" required data-maxlength="15" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="EditLastName" placeholder="Last Name *" required data-maxlength="15" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="EditMobile" placeholder="Mobile *" required data-minlength="8" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="EditPhone" placeholder="Phone" data-type="phone" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="EditEmail" placeholder="Email *" required />
+                        </div>
 
-			<h4>
-				<a name="tools-used-in-this-project" class="anchor" href="#tools-used-in-this-project"><span class="octicon octicon-link"></span></a>Tools used in this project:
-			</h4>
+                        <div class="placeholder-group-dropdown updateGroupForContact"></div>
+                        <input type="hidden" id="HiddenContactId" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="editContact">Update Contact</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-			<ol style="margin-bottom: 40px;">
-				<li><a href="http://twbs.github.io/bootstrap/">Twitter Bootstrap</a></li>
-				<li><a href="http://glyphicons.getbootstrap.com/">Glyphicons</a></li>
-				<li><a href="http://jensarps.github.io/IDBWrapper/">IDBWrapper</a></li>
-				<li><a href="http://handlebarsjs.com/">Handlebars</a></li>
-				<li><a href="http://parsleyjs.org/">Parsley</a></li>
-			</ol>
+    <div id="ModalContactGroupAdd" class="modal fade" data-backdrop="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="group-add-form">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add a contact group</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-add-group"></div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="GroupName" placeholder="Group Name *" required data-minlength="4" data-maxlength="15" />
+                        </div>
 
-<pre><code>HTTPS clone URL = https://github.com/shibbir/SimpleContactManager.git
-</code></pre>
+                        <div id="placeholder-group-dropdown"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="addGroup">Add New Group</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-			<div class="title">
-				<hr />
-				<span class="credits left">Project maintained by <a href="http://shibbir.net/" target="blank">Shibbir Ahmed</a></span>
-				<span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-			</div>
-		</section>
-	</div>
-	<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    <div id="ModalContactGroupEdit" class="modal fade" data-backdrop="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="group-edit-form">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Update contact group</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-edit-group"></div>
+                        <div class="form-group">
+                            <input type="hidden" id="HiddenGroupId" />
+                            <input type="text" class="form-control" id="EditGroupName" placeholder="Group Name *" required data-maxlength="20" />
+                        </div>
+
+                        <div id="placeholder-group-dropdown"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="editGroup">Update Group</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script id="template-group-dropdown" type="text/x-handlebars-template">
+        {{#if groups}}
+            <select id="Group" data-required="true" class="form-control">
+                <option value="">Choose a group</option>
+                {{#groups}}
+                    <option value="{{id}}">{{GroupName}}</option>
+                {{/groups}}
+           </select>
+           {{#enableAddContactButton}}{{/enableAddContactButton}}
+        {{else}}
+            <div class="alert alert-danger">
+                {{#disableAddContactButton}}{{/disableAddContactButton}}
+                <small>You have not created any contact category yet!</small>
+            </div>
+        {{/if}}
+    </script>
+
+    <script id="template-groups" type="text/x-handlebars-template">
+        {{#if groups}}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#groups}}
+                    <tr data-group-id="{{id}}" data-group-name="{{GroupName}}">
+                        <td>{{GroupName}}</td>
+                        <td>
+                            <a title="edit" data-target="#ModalContactGroupEdit" data-toggle="modal" class="btnEditGroupModal">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                            <a title="delete"><span class="glyphicon glyphicon-remove btn-remove-group"></span></a>
+                        </td>
+                    </tr>
+                    {{/groups}}
+                </tbody>
+            </table>
+        {{else}}
+            <div class="notfound">
+                You have not created any groups!
+            </div>
+        {{/if}}
+    </script>
+
+    <script id="template-contacts" type="text/x-handlebars-template">
+        {{#if contacts}}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Category</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#contacts}}
+                    <tr data-contactid="{{contactid}}" data-firstname="{{FirstName}}" data-lastname="{{LastName}}" data-mobile="{{Mobile}}" data-phone="{{Phone}}" data-email="{{Email}}">
+                        <td>{{FirstName}} {{LastName}}</td>
+                        <td>{{Mobile}}</td>
+                        <td>
+                            {{#if Phone}}
+                                {{Phone}}
+                            {{else}}
+                                Not available
+                            {{/if}}
+                        </td>
+                        <td>{{Email}}</td>
+                        <td>{{GroupName}}</td>
+                        <td data-contact-id="{{contactid}}">
+                            <a title="edit" data-target="#ModalContactEdit" data-toggle="modal" class="btnEditContactModal">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                            <a title="delete"><span class="glyphicon glyphicon-remove btn-remove-contact"></span></a>
+                        </td>
+                    </tr>
+                    {{/contacts}}
+                </tbody>
+            </table>
+        {{else}}
+            <div class="notfound">
+                Sorry! No contacts are available.
+            </div>
+        {{/if}}
+    </script>
+
+    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.3.min.js"><\/script>')</script>
+    <script src="js/vendor/handlebars.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/parsley.min.js"></script>
+    <script src="js/vendor/idbstore.min.js"></script>
+    <script src="js/app/group-repository.js"></script>
+    <script src="js/app/contact-repository.js"></script>
+    <script src="js/app/main.js"></script>
+
 </body>
 </html>
