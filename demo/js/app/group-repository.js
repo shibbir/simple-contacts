@@ -22,6 +22,13 @@ GroupRepository.prototype = function () {
 	};
 
 	var groupList = function (data) {
+		Handlebars.registerHelper("disableAddContactButton", function() {
+        	$("#addContact").attr("disabled", true);
+    	});
+    	Handlebars.registerHelper("enableAddContactButton", function() {
+        	$("#addContact").removeAttr("disabled");
+    	});
+
 	 	var source = $("#template-groups").html();
 		template = Handlebars.compile(source);
 		$("#placeholder-groups").html(template(

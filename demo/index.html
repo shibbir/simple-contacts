@@ -41,7 +41,7 @@
         </div>
     </div>
     <footer class="container">
-		 Copyright &copy; 2013 <a href="http://shibbir.net/" target="blank">Shibbir Ahmed.</a> All rights reserved.
+         Copyright &copy; 2013 <a href="http://shibbir.net/" target="blank">Shibbir Ahmed.</a> All rights reserved.
     </footer>
 
     <div id="ModalContactAdd" class="modal fade" data-backdrop="true">
@@ -178,8 +178,10 @@
                     <option value="{{id}}">{{GroupName}}</option>
                 {{/groups}}
            </select>
+           {{#enableAddContactButton}}{{/enableAddContactButton}}
         {{else}}
             <div class="alert alert-danger">
+                {{#disableAddContactButton}}{{/disableAddContactButton}}
                 <small>You have not created any contact category yet!</small>
             </div>
         {{/if}}
