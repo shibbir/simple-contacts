@@ -15,7 +15,7 @@ GroupRepository.prototype = function () {
 			groupNodeCache[id] = document.getElementById(id);
 		});
 
-		groupNodeCache.addGroup.addEventListener("click", craeteGroup);
+		groupNodeCache.addGroup.addEventListener("click", createNewGroup);
 	};
 	var refreshGroups = function () {
 		groups.getAll(groupList);
@@ -41,22 +41,39 @@ GroupRepository.prototype = function () {
 		$(document).trigger("CustomEvent/GroupStoreInitialized");
 	};
 
-	var craeteGroup = function () {
+	var isDataAlreadyExist = function (oldData) {
+		var newData = {}, dataExists = false;
+		["GroupName"].forEach(function(key) {
+			var value = groupNodeCache[key].value.trim();
+			newData[key] = value;
+		});
+
+		oldData.forEach(function (key) {
+			if(newData.GroupName.toLowerCase() === key.GroupName.toLowerCase()) {
+				$(".notification-add-group").html('<div class="alert alert-danger"><span>Record already exists!</span></div>').fadeIn(200).delay(1500).fadeOut(300);
+				dataExists = true;
+			}
+		});
+		if(!dataExists) {
+			addGroupIntoDb(newData);
+		}
+	};
+
+	var createNewGroup = function () {
 		var groupAddForm = $("#group-add-form");
 		groupAddForm.parsley("validate");
 
 		if(groupAddForm.parsley("isValid")) {
-			var data = {};
-			["GroupName"].forEach(function(key) {
-				var value = groupNodeCache[key].value.trim();
-				data[key] = value;
-			});
-			groups.put(data, function() {
-				$("input").val("");
-				refreshGroups();
-				$(".notification-add-group").html('<div class="alert alert-success"><span>New record created.</span></div>').fadeIn(200).delay(2000).fadeOut(300);
-			});
+			groups.getAll(isDataAlreadyExist);
 		}
+	};
+
+	var addGroupIntoDb = function (data) {
+		groups.put(data, function() {
+			$("input").val("");
+			refreshGroups();
+			$(".notification-add-group").html('<div class="alert alert-success"><span>New record created.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
+		});
 	};
 
 	var editGroup = function (group) {
@@ -69,7 +86,7 @@ GroupRepository.prototype = function () {
 
 		if(groupEditForm.parsley("isValid")) {
 			groups.put(data, refreshGroups);
-			$(".notification-edit-group").html('<div class="alert alert-success"><span>The record has been updated.</span></div>').fadeIn(200).delay(2000).fadeOut(300);
+			$(".notification-edit-group").html('<div class="alert alert-success"><span>The record has been updated.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
 		}
 	};
 

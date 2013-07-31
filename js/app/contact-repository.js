@@ -16,7 +16,7 @@ ContactRepository.prototype = function () {
 			contactNodeCache[id] = document.getElementById(id);
 		});
 
-		contactNodeCache.addContact.addEventListener("click", craeteContact);
+		contactNodeCache.addContact.addEventListener("click", createContact);
 	};
 	var refreshContacts = function () {
 		contacts.getAll(contactList);
@@ -40,7 +40,7 @@ ContactRepository.prototype = function () {
 		}));
 	};
 
-	var craeteContact = function () {
+	var createContact = function () {
 		var contactAddForm = $("#contact-add-form");
 		contactAddForm.parsley("validate");
 
@@ -58,7 +58,7 @@ ContactRepository.prototype = function () {
 			contacts.put(data, function() {
 				$("input").val("");
 				refreshContacts();
-				$(".notification-add-contact").html('<div class="alert alert-success"><span>New record created.</span></div>').fadeIn(200).delay(2000).fadeOut(300);
+				$(".notification-add-contact").html('<div class="alert alert-success"><span>New record created.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
 			});
 		}
 	};
@@ -79,7 +79,7 @@ ContactRepository.prototype = function () {
 
 		if(contactEditForm.parsley("isValid")) {
 			contacts.put(data, refreshContacts);
-			$(".notification-edit-contact").html('<div class="alert alert-success"><span>The record has been updated.</span></div>').fadeIn(200).delay(2000).fadeOut(300);
+			$(".notification-edit-contact").html('<div class="alert alert-success"><span>The record has been updated.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
 		}
 	};
 

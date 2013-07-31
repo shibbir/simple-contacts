@@ -107,7 +107,7 @@
                             <input type="email" class="form-control" id="EditEmail" placeholder="Email *" required />
                         </div>
 
-                        <div class="placeholder-group-dropdown"></div>
+                        <div class="placeholder-group-dropdown updateGroupForContact"></div>
                         <input type="hidden" id="HiddenContactId" />
                     </div>
                     <div class="modal-footer">
@@ -130,7 +130,7 @@
                     <div class="modal-body">
                         <div class="notification-add-group"></div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="GroupName" placeholder="Group Name *" required data-maxlength="20" />
+                            <input type="text" class="form-control" id="GroupName" placeholder="Group Name *" required data-minlength="4" data-maxlength="15" />
                         </div>
 
                         <div id="placeholder-group-dropdown"></div>
@@ -196,7 +196,7 @@
                 </thead>
                 <tbody>
                     {{#groups}}
-                    <tr data-group-id={{id}} data-group-name={{GroupName}}>
+                    <tr data-group-id="{{id}}" data-group-name="{{GroupName}}">
                         <td>{{GroupName}}</td>
                         <td>
                             <a title="edit" data-target="#ModalContactGroupEdit" data-toggle="modal" class="btnEditGroupModal">
@@ -230,7 +230,7 @@
                 </thead>
                 <tbody>
                     {{#contacts}}
-                    <tr data-contactid="{{contactid}}" data-firstname={{FirstName}} data-lastname={{LastName}} data-mobile={{Mobile}} data-phone={{Phone}} data-email={{Email}}>
+                    <tr data-contactid="{{contactid}}" data-firstname="{{FirstName}}" data-lastname="{{LastName}}" data-mobile="{{Mobile}}" data-phone="{{Phone}}" data-email="{{Email}}">
                         <td>{{FirstName}} {{LastName}}</td>
                         <td>{{Mobile}}</td>
                         <td>
@@ -242,7 +242,7 @@
                         </td>
                         <td>{{Email}}</td>
                         <td>{{GroupName}}</td>
-                        <td data-contact-id={{contactid}}>
+                        <td data-contact-id="{{contactid}}">
                             <a title="edit" data-target="#ModalContactEdit" data-toggle="modal" class="btnEditContactModal">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </a>
@@ -265,7 +265,6 @@
     <script src="js/vendor/bootstrap.min.js"></script>
     <script src="js/vendor/parsley.min.js"></script>
     <script src="js/vendor/idbstore.min.js"></script>
-    <script src="js/vendor/jquery.flexipage.min.js"></script>
     <script src="js/app/group-repository.js"></script>
     <script src="js/app/contact-repository.js"></script>
     <script src="js/app/main.js"></script>

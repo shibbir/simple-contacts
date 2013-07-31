@@ -11,6 +11,9 @@
 		$("input").val("");
 		$("#contact-add-form").parsley("destroy");
 	});
+	$("#ModalContactAdd").on("show.bs.modal", function () {
+		groupRepository.refreshGroups();
+	});
 	$("#ModalContactEdit").on("hidden.bs.modal", function () {
 		$("input").val("");
 		$("#contact-edit-form").parsley("destroy");
@@ -55,7 +58,7 @@
 			Mobile: document.getElementById("EditMobile").value,
 			Phone: document.getElementById("EditPhone").value,
 			Email: document.getElementById("EditEmail").value,
-			Group: "1375133409749"
+			Group: $(".updateGroupForContact select").find(":selected").val()
 		});
 	});
 	$(document).on("click", ".btn-remove-group", function () {
