@@ -86,6 +86,13 @@ a {
 a:hover {
 	text-decoration: none;
 }
+a:hover, footer a:hover {
+	text-decoration: underline;
+	color: #FFFFFF;
+}
+footer a {
+	color: #FFFFFF;
+}
 .modal-title {
 	color: #999999;
     font-size: 20px;
