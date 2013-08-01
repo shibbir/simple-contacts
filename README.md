@@ -13,8 +13,6 @@ Tools used in this project:
 4. [Handlebars](http://handlebarsjs.com/)
 5. [Parsley](http://parsleyjs.org/)
 
-*******
-License
-*******
-Please see the `license
-agreement <https://github.com/shibbir/SimpleContactManager/blob/master/LICENSE>`_
+### License
+
+[Please see the license agreement] (https://github.com/shibbir/SimpleContactManager/blob/master/LICENSE)
