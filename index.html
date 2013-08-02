@@ -243,7 +243,13 @@
                             {{/if}}
                         </td>
                         <td>{{Email}}</td>
-                        <td>{{GroupName}}</td>
+                        <td>
+                            {{#if GroupName}}
+                                {{GroupName}}
+                            {{else}}
+                                Uncategorized
+                            {{/if}}
+                        </td>
                         <td data-contact-id="{{contactid}}">
                             <a title="edit" data-target="#ModalContactEdit" data-toggle="modal" class="btnEditContactModal">
                                 <span class="glyphicon glyphicon-edit"></span>
