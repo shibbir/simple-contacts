@@ -45,7 +45,7 @@ GroupRepository.prototype = function () {
 			})
 		);
 
-		$(document).trigger("CustomEvent/GroupStoreInitialized");
+		$(document).trigger("CustomEvent/GroupStoreModified");
 	};
 
 	var isDataAlreadyExist = function (oldData) {
@@ -66,6 +66,25 @@ GroupRepository.prototype = function () {
 		}
 	};
 
+	var isGroupNameAlreadyExistWhenEdit = function (allData) {
+		var editedGroup = {}, dataExists = false;
+		editedGroup = {
+			id: parseInt(document.getElementById("HiddenGroupId").value, 10),
+			GroupName: document.getElementById("EditGroupName").value
+		};
+		allData.forEach(function (key) {
+			if(editedGroup.id !== key.id) {
+				if(editedGroup.GroupName.toLowerCase() === key.GroupName.toLowerCase()) {
+					$(".notification-edit-group").html('<div class="alert alert-danger"><span>Record already exists!</span></div>').fadeIn(200).delay(1500).fadeOut(300);
+					dataExists = true;
+				}
+			}
+		});
+		if(!dataExists) {
+			editGroupIntoDb(editedGroup);
+		}
+	};
+
 	var createNewGroup = function () {
 		var groupAddForm = $("#group-add-form");
 		groupAddForm.parsley("validate");
@@ -82,18 +101,19 @@ GroupRepository.prototype = function () {
 			$(".notification-add-group").html('<div class="alert alert-success"><span>New record created.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
 		});
 	};
+	var editGroupIntoDb = function (data) {
+		groups.put(data, function() {
+			refreshGroups();
+			$(".notification-edit-group").html('<div class="alert alert-success"><span>The record has been updated.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
+		});
+	};
 
-	var editGroup = function (group) {
-		var data = {
-			id: parseInt(group.Id, 10),
-			GroupName: group.GroupName.trim()
-		};
+	var editGroup = function () {
 		var groupEditForm = $("#group-edit-form");
 		groupEditForm.parsley("validate");
 
 		if(groupEditForm.parsley("isValid")) {
-			groups.put(data, refreshGroups);
-			$(".notification-edit-group").html('<div class="alert alert-success"><span>The record has been updated.</span></div>').fadeIn(200).delay(1500).fadeOut(300);
+			groups.getAll(isGroupNameAlreadyExistWhenEdit);
 		}
 	};
 

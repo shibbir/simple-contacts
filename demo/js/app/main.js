@@ -3,7 +3,7 @@
 		contactRepository = new ContactRepository();
 
 	groupRepository.initGroupStore();
-	$(document).on("CustomEvent/GroupStoreInitialized", function () {
+	$(document).on("CustomEvent/GroupStoreModified", function () {
 		contactRepository.initContactStore();
 	});
 
@@ -33,10 +33,7 @@
 		document.getElementById("EditGroupName").value = $this.data("groupName");
 	});
 	$(document).on("click", "#editGroup", function () {
-		groupRepository.editGroup({
-			Id: document.getElementById("HiddenGroupId").value,
-			GroupName: document.getElementById("EditGroupName").value
-		});
+		groupRepository.editGroup();
 	});
 
 	$(document).on("click", ".btnEditContactModal", function () {

@@ -71,7 +71,7 @@ ContactRepository.prototype = function () {
 			Phone: contact.Phone.trim(),
 			Mobile: contact.Mobile.trim(),
 			Email: contact.Email.trim(),
-			Group: contact.Group.trim()
+			Group: contact.Group
 		};
 
 		var contactEditForm = $("#contact-edit-form");
