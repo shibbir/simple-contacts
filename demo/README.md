@@ -1,11 +1,36 @@
 SimpleContactManager
 ====================
 
-A super simple HTML5 based contact manager using html5 indexedDb
+A super simple contact manager using HTML5 IndexedDb
 
+[Project Website](http://shibbir.github.io/SimpleContactManager/)
 
-1. [Twitter Bootstrap](http://twbs.github.io/bootstrap/)
-2. [Glyphicons](http://glyphicons.getbootstrap.com/)
-3. [IDBWrapper](http://jensarps.github.io/IDBWrapper/)
-4. [Handlebars](http://handlebarsjs.com/)
-5. [Parsley](http://parsleyjs.org/)
+Tools used in this project:
+
+* [Twitter Bootstrap](http://getbootstrap.com/)
+* [IDBWrapper](http://jensarps.github.io/IDBWrapper/)
+* [Handlebars](http://handlebarsjs.com/)
+* [Parsley](http://parsleyjs.org/)
+
+Installation
+====================
+
+You can either clone the repo, or download the zip file from here: https://github.com/shibbir/SimpleContactManager/zipball/master
+
+Git Clone:
+
+```bash
+$ git clone https://github.com/shibbir/SimpleContactManager.git
+```
+
+Now you need bower to install the dependencies. Just run the following:
+
+```bash
+$ bower install
+```
+
+For more information on bower please visit: http://bower.io/
+
+### License
+
+[Please see the license agreement] (https://github.com/shibbir/SimpleContactManager/blob/master/LICENSE)
