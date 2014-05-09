@@ -30,7 +30,7 @@ GroupRepository.prototype = function () {
     	});
 
 	 	var source = $("#template-groups").html();
-		template = Handlebars.compile(source);
+		var template = Handlebars.compile(source);
 		$("#placeholder-groups").html(template(
 			{
 				groups: data

@@ -1,0 +1,19 @@
+{
+    "name": "SimpleContactManager",
+    "version": "1.0.1",
+    "description": "A super simple contact manager using HTML5 IndexedDb",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibbir/SimpleContactManager.git"
+    },
+    "keywords": [
+        "indexed db",
+        "html5",
+        "twitter bootstrap"
+    ],
+    "author": "Shibbir Ahmed <shibbir.cse@gmail.com>",
+    "bugs": {
+        "url": "https://github.com/shibbir/SimpleContactManager/issues"
+    },
+    "homepage": "http://shibbir.github.io/SimpleContactManager/"
+}

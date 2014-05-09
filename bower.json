@@ -1,0 +1,27 @@
+{
+    "name": "SimpleContactManager",
+    "version": "1.0.1",
+    "homepage": "http://shibbir.github.io/SimpleContactManager/",
+    "authors": [
+        "Shibbir Ahmed <shibbir.cse@gmail.com>"
+    ],
+    "description": "A super simple contact manager using HTML5 IndexedDb",
+    "main": "index.html",
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "~2.1.1",
+        "bootstrap": "~3.1.1",
+        "handlebars": "~1.3.0",
+        "parsleyjs": "~1.*",
+        "modernizr": "~2.8.1",
+        "idbwrapper": "~1.4.1"
+    }
+}

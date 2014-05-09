@@ -11,17 +11,17 @@
 
     <title>Simple Contact Manager</title>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bootstrap-glyphicons.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="public/css/style.css" />
 
-    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src="public/bower_components/modernizr/modernizr.js"></script>
 </head>
 <body>
     <div id="container-wrapper" class="container">
         <header>
             <h2>A simple HTML5 based contact manager</h2>
             <h4>HTML5, IndexedDB, Twitter Bootstrap, Handlebars</h4>
+            <hr />
         </header>
         <a class="btn btn-primary" data-target="#ModalContactGroupAdd" data-toggle="modal">
             <span class="glyphicon glyphicon-plus"></span>
@@ -32,16 +32,16 @@
             Create Contact
         </a>
         <div id="content-wrapper" class="row-fluid">
-            <div class="col-12 col-sm-12 col-lg-3 flat">
+            <div class="col-xs-12 col-sm-12 col-md-3 flat">
                 <div id="placeholder-groups"></div>
             </div>
-            <div class="col-12 col-sm-12 col-lg-8 col-offset-1 flat">
+            <div class="col-12 col-sm-12 col-lg-8 col-sm-offset-1 flat">
                 <div id="placeholder-contacts"></div>
             </div>
         </div>
     </div>
     <footer class="container">
-         Copyright &copy; 2013 <a href="http://shibbir.net/" target="blank">Shibbir Ahmed.</a> All rights reserved.
+         Project maintained by <a href="http://shibbir.net/" target="blank">Shibbir Ahmed.</a>
     </footer>
 
     <div id="ModalContactAdd" class="modal fade" data-backdrop="true">
@@ -267,15 +267,15 @@
         {{/if}}
     </script>
 
-    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.3.min.js"><\/script>')</script>
-    <script src="js/vendor/handlebars.js"></script>
-    <script src="js/vendor/bootstrap.min.js"></script>
-    <script src="js/vendor/parsley.min.js"></script>
-    <script src="js/vendor/idbstore.min.js"></script>
-    <script src="js/app/group-repository.js"></script>
-    <script src="js/app/contact-repository.js"></script>
-    <script src="js/app/main.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="public/bower_components/jquery/jquery.min.js"><\/script>')</script>
+    <script src="public/bower_components/handlebars/handlebars.min.js"></script>
+    <script src="public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="public/bower_components/parsleyjs/dist/parsley.min.js"></script>
+    <script src="public/bower_components/idbwrapper/idbstore.min.js"></script>
+    <script src="public/js/group-repository.js"></script>
+    <script src="public/js/contact-repository.js"></script>
+    <script src="public/js/main.js"></script>
 
 </body>
 </html>
