@@ -5,10 +5,6 @@
     }
 }
  
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) {
-}
- 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
 	body {
@@ -62,6 +58,7 @@ ul.parsley-error-list {
 	list-style: none;
 	padding: 0;
 	color: red;
+    margin-top: 10px;
 }
 .alert, .btn, .modal-content {
 	border-radius: 0;
