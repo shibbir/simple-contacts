@@ -1,0 +1,26 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"]
+  },
+  "env": {
+    "node": true,
+    "mocha": true,
+    "browser": true,
+    "jquery": true
+  },
+  "globals": {
+    "IDBStore": true,
+    "Handlebars": true,
+    "GroupRepository": true,
+    "ContactRepository": true
+  }
+}

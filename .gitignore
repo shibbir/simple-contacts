@@ -1,15 +1,28 @@
 # don't ignore myself!
+# ===========
 !.gitignore
 
-# WebStorm project files
-.idea
+# OS
+# ===========
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
 
-# Node Modules
+# Node and related ecosystem
+# ==========================
+.nodemonignore
 node_modules
+.bower-*/
+bower_components
+coverage
 
-# Bower Packages
-vendor
-public/bower_components
+# General
+# =======
+*.log
+dist
 
-#Codio
-.codio
+# Editors
+# =======
+.idea
+.vscode
