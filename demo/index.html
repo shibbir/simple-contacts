@@ -1,56 +1,53 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html>
 <head>
-	<meta charset=utf-8>
+    <meta charset=utf-8>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="a simple html5 based contact manager using IndexedDB and twitter bootstrap" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Simple Contact Manager</title>
 
-    <link rel="stylesheet" href="public/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="public/css/style.css" />
-
-    <script src="public/js/libs/modernizr.js"></script>
+    <link rel="stylesheet" href="./css/styles.min.css" />
 </head>
 <body>
     <div id="container-wrapper" class="container">
         <header>
-            <h2>A simple HTML5 based contact manager</h2>
+            <h2>Simple HTML5 based contact manager</h2>
             <h4>HTML5, IndexedDB, Twitter Bootstrap, Handlebars</h4>
             <hr />
         </header>
-        <a class="btn btn-primary" data-target="#ModalContactGroupAdd" data-toggle="modal">
+
+        <a class="btn btn-primary" data-target="#ModalAddContactGroup" data-toggle="modal">
             <span class="glyphicon glyphicon-plus"></span>
-            Create a group
+            Create group
         </a>
-        <a class="btn btn-primary" data-target="#ModalContactAdd" data-toggle="modal">
+        <a class="btn btn-primary" data-target="#ModalAddContact" data-toggle="modal">
             <span class="glyphicon glyphicon-plus"></span>
-            Create Contact
+            Add new contact
         </a>
+
         <div id="content-wrapper" class="row-fluid">
             <div class="col-xs-12 col-sm-12 col-md-3 flat">
                 <div id="placeholder-groups"></div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-offset-1 flat">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-1 flat">
                 <div id="placeholder-contacts"></div>
             </div>
         </div>
     </div>
+
     <footer class="container">
-         Project maintained by <a href="http://shibbir.net/" target="blank">Shibbir Ahmed.</a>
+         Copyright &copy; 2016 Shibbir Ahmed
     </footer>
 
-    <div id="ModalContactAdd" class="modal fade" data-backdrop="true">
+    <div id="ModalAddContact" class="modal fade" data-backdrop="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="contact-add-form">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Add a contact</h4>
+                        <h4 class="modal-title">Add new contact</h4>
                     </div>
                     <div class="modal-body">
                         <div class="notification-add-contact"></div>
@@ -62,9 +59,6 @@
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="Mobile" placeholder="Mobile *" required data-minlength="8" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="Phone" placeholder="Phone" data-type="phone" />
                         </div>
                         <div class="form-group">
                             <input type="email" class="form-control" id="Email" placeholder="Email *" required />
@@ -81,7 +75,7 @@
         </div>
     </div>
 
-    <div id="ModalContactEdit" class="modal fade" data-backdrop="true">
+    <div id="ModalEditContact" class="modal fade" data-backdrop="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="contact-edit-form">
@@ -101,9 +95,6 @@
                             <input type="text" class="form-control" id="EditMobile" placeholder="Mobile *" required data-minlength="8" />
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="EditPhone" placeholder="Phone" data-type="phone" />
-                        </div>
-                        <div class="form-group">
                             <input type="email" class="form-control" id="EditEmail" placeholder="Email *" required />
                         </div>
 
@@ -119,13 +110,13 @@
         </div>
     </div>
 
-    <div id="ModalContactGroupAdd" class="modal fade" data-backdrop="true">
+    <div id="ModalAddContactGroup" class="modal fade" data-backdrop="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="group-add-form">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Add a contact group</h4>
+                        <h4 class="modal-title">Add new group</h4>
                     </div>
                     <div class="modal-body">
                         <div class="notification-add-group"></div>
@@ -142,13 +133,13 @@
         </div>
     </div>
 
-    <div id="ModalContactGroupEdit" class="modal fade" data-backdrop="true">
+    <div id="ModalEditContactGroup" class="modal fade" data-backdrop="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="group-edit-form">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Update contact group</h4>
+                        <h4 class="modal-title">Update group</h4>
                     </div>
                     <div class="modal-body">
                         <div class="notification-edit-group"></div>
@@ -168,7 +159,7 @@
 
     <script id="template-group-dropdown" type="text/x-handlebars-template">
         {{#if groups}}
-            <select id="Group" data-required="true" class="form-control">
+            <select id="Group" required class="form-control">
                 <option value="">Choose a group</option>
                 {{#groups}}
                     <option value="{{id}}">{{GroupName}}</option>
@@ -178,7 +169,7 @@
         {{else}}
             <div class="alert alert-danger">
                 {{#disableAddContactButton}}{{/disableAddContactButton}}
-                <small>You have not created any contact category yet!</small>
+                <small>You have not created any contact group yet!</small>
             </div>
         {{/if}}
     </script>
@@ -197,7 +188,7 @@
                     <tr data-group-id="{{id}}" data-group-name="{{GroupName}}">
                         <td>{{GroupName}}</td>
                         <td>
-                            <a title="edit" data-target="#ModalContactGroupEdit" data-toggle="modal" class="btnEditGroupModal">
+                            <a title="edit" data-target="#ModalEditContactGroup" data-toggle="modal" class="btnEditGroupModal">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </a>
                             <a title="delete"><span class="glyphicon glyphicon-remove btn-remove-group"></span></a>
@@ -220,7 +211,6 @@
                     <tr>
                         <th>Name</th>
                         <th>Mobile</th>
-                        <th>Phone</th>
                         <th>Email</th>
                         <th>Category</th>
                         <th>Action</th>
@@ -228,16 +218,9 @@
                 </thead>
                 <tbody>
                     {{#contacts}}
-                    <tr data-contactid="{{contactid}}" data-firstname="{{FirstName}}" data-lastname="{{LastName}}" data-mobile="{{Mobile}}" data-phone="{{Phone}}" data-email="{{Email}}">
+                    <tr data-contactid="{{contactid}}" data-firstname="{{FirstName}}" data-lastname="{{LastName}}" data-mobile="{{Mobile}}" data-email="{{Email}}" data-group="{{Group}}">
                         <td>{{FirstName}} {{LastName}}</td>
                         <td>{{Mobile}}</td>
-                        <td>
-                            {{#if Phone}}
-                                {{Phone}}
-                            {{else}}
-                                Not available
-                            {{/if}}
-                        </td>
                         <td>{{Email}}</td>
                         <td>
                             {{#if GroupName}}
@@ -247,7 +230,7 @@
                             {{/if}}
                         </td>
                         <td data-contact-id="{{contactid}}">
-                            <a title="edit" data-target="#ModalContactEdit" data-toggle="modal" class="btnEditContactModal">
+                            <a title="edit" data-target="#ModalEditContact" data-toggle="modal" class="btnEditContactModal">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </a>
                             <a title="delete"><span class="glyphicon glyphicon-remove btn-remove-contact"></span></a>
@@ -263,15 +246,7 @@
         {{/if}}
     </script>
 
-    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script>window.jQuery || document.write('<script src="public/js/libs/jquery.min.js"><\/script>')</script>
-    <script src="public/js/libs/handlebars.min.js"></script>
-    <script src="public/js/libs/bootstrap.min.js"></script>
-    <script src="public/js/libs/parsley.min.js"></script>
-    <script src="public/js/libs/idbstore.min.js"></script>
-    <script src="public/js/group-repository.js"></script>
-    <script src="public/js/contact-repository.js"></script>
-    <script src="public/js/main.js"></script>
+    <script src="./js/scripts.min.js"></script>
 
 </body>
 </html>
