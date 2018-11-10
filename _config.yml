@@ -1,0 +1,8 @@
+title: Simple Contact Manager
+description: HTML5, IndexedDB, Twitter Bootstrap, Handlebars
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-midnight
+
+gems:
+  - jekyll-mentions
