@@ -1,70 +1,363 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Simple Contact Manager by shibbir</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="Simple browser based contact manager using IndexedDB" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  </head>
-  <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/shibbir/SimpleContactManager">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/shibbir/SimpleContactManager/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/shibbir/SimpleContactManager/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <title>Simple Contact Manager</title>
 
-    <div class="wrapper">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <header>
+                <h2 class="title">HTML5 Powered Contact Manager</h2>
+                <div class="field is-grouped is-grouped-multiline">
+                    <div class="control">
+                        <div class="tags has-addons">
+                            <span class="tag">Version</span>
+                            <span class="tag is-warning">3.0.0</span>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="tags has-addons">
+                            <span class="tag">Source</span>
+                            <a class="tag is-info" href="https://github.com/shibbir/simple-contact-manager">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </header>
 
-      <section>
-        <div id="title">
-          <h1>Simple Contact Manager</h1>
-          <p>HTML5, IndexedDB, Bootstrap, Handlebars, Parsley</p>
-          <hr>
+            <div class="columns">
+                <div class="column is-one-third">
+                    <a class="button is-primary modal-button" data-target="ModalAddContactGroup">
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>ADD GROUP</span>
+                    </a>
+
+                    <br /><br />
+
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Contact Group
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <div id="placeholder-groups"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <a class="button is-primary modal-button" data-target="ModalAddContact">
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>ADD CONTACT</span>
+                    </a>
+
+                    <br /><br />
+
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Contacts
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <div id="placeholder-contacts"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>
+                        Maintained by <a href="https://shibbir.io"><strong>Shibbir Ahmed</strong></a>.
+                        The source code is licensed under <a href="http://opensource.org/licenses/mit-license.php"><strong>MIT</strong></a>.
+                    </p>
+                    <p>Made with <strong>IndexedDB</strong>, <strong>Bulma</strong>, <strong>Handlebars</strong>, <strong>Parsley</strong></p>
+                </div>
+            </footer>
         </div>
-        <a href="./demo/index.html">
-          <div id="demo">Demo</div>
-        </a>
+    </section>
 
-        <h1>
-<a name="simplecontactmanager" class="anchor" href="#simplecontactmanager"><span class="octicon octicon-link"></span></a>SimpleContactManager</h1>
+    <div id="ModalAddContactGroup" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <p class="title">Add Group</p>
+            <hr />
 
-<p>A super simple contact manager using HTML5 IndexedDB</p>
-
-<h4>
-<a name="tools-used-in-this-project" class="anchor" href="#tools-used-in-this-project"><span class="octicon octicon-link"></span></a>Tools used in this project:</h4>
-
-<ul>
-  <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
-  <li><a href="http://jensarps.github.io/IDBWrapper/">IDBWrapper</a></li>
-  <li><a href="http://handlebarsjs.com/">Handlebars</a></li>
-  <li><a href="http://parsleyjs.org/">Parsley</a></li>
-</ul>
-
-<pre><code>HTTPS clone URL = https://github.com/shibbir/SimpleContactManager.git
-</code></pre>
-<div class="title">
-        <hr>
-        <span class="credits left">Project maintained by <a target="blank" href="https://shibbir.net/">Shibbir Ahmed</a></span>
-        <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-      </div>
-      </section>
-
+            <form id="group-add-form">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <div class="control">
+                        <input type="text" class="input" id="group-title" required data-minlength="4" data-maxlength="15" />
+                    </div>
+                </div>
+                <div class="control">
+                    <button type="button" class="button is-success" id="btn-add-group">
+                        <span class="icon">
+                            <i class="fas fa-save"></i>
+                        </span>
+                        <span>Save changes</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
+
+    <div id="ModalEditContactGroup" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <p class="title">Edit Group</p>
+            <hr />
+
+            <form id="group-edit-form">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <div class="control">
+                        <input type="hidden" id="edited-group-id" />
+                        <input type="text" class="input" id="edited-group-title" required data-maxlength="20" />
+                    </div>
+                </div>
+
+                <div class="control">
+                    <button type="button" class="button is-success" id="btn-edit-group">
+                        <span class="icon">
+                            <i class="fas fa-save"></i>
+                        </span>
+                        <span>Save changes</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+    <div id="ModalAddContact" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <p class="title">Add Contact</p>
+            <hr />
+
+            <form id="contact-add-form">
+                <div class="field">
+                    <label class="label">First Name</label>
+                    <div class="control">
+                        <input type="text" class="input" id="first-name" required data-maxlength="15" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Last Name</label>
+                    <div class="control">
+                        <input type="text" class="input" id="last-name" required data-maxlength="15" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Mobile</label>
+                    <div class="control">
+                        <input type="text" class="input" id="mobile" required data-maxlength="8" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control">
+                        <input type="email" class="input" id="email" required />
+                    </div>
+                </div>
+
+                <div class="placeholder-group-dropdown field"></div>
+
+                <hr />
+
+                <div class="field buttons is-right">
+                    <div class="control">
+                        <button type="button" class="button is-success" id="btn-add-contact">
+                            <span class="icon">
+                                <i class="fas fa-save"></i>
+                            </span>
+                            <span>Save changes</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+    <div id="ModalEditContact" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <p class="title">Edit Contact</p>
+            <hr />
+
+            <form id="contact-edit-form">
+                <div class="field">
+                    <label class="label">First Name</label>
+                    <div class="control">
+                        <input type="text" class="input" id="edited-first-name" required data-maxlength="15" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Last Name</label>
+                    <div class="control">
+                        <input type="text" class="input" id="edited-last-name" required data-maxlength="15" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Mobile</label>
+                    <div class="control">
+                        <input type="text" class="input" id="edited-mobile" required data-maxlength="8" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control">
+                        <input type="email" class="input" id="edited-email" required />
+                    </div>
+                </div>
+
+                <div class="placeholder-group-dropdown updateGroupForContact field"></div>
+
+                <input type="hidden" id="edited-contact-id" />
+
+                <hr />
+
+                <div class="field">
+                    <div class="control">
+                        <button type="button" class="button is-success" id="btn-edit-contact">
+                            <span class="icon">
+                                <i class="fas fa-save"></i>
+                            </span>
+                            <span>Save changes</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+    <script id="template-group-dropdown" type="text/x-handlebars-template">
+        {{#if groups}}
+            <label class="label">Contact Group</label>
+            <div class="control">
+                <div class="select">
+                    <select id="group-id" required>
+                        <option value="">Select group</option>
+                        {{#groups}}
+                            <option value="{{id}}">{{title}}</option>
+                        {{/groups}}
+                    </select>
+                </div>
+            </div>
+           {{#enableAddContactButton}}{{/enableAddContactButton}}
+        {{else}}
+            {{#disableAddContactButton}}{{/disableAddContactButton}}
+            <p>No contact groups are found!</p>
+        {{/if}}
+    </script>
+
+    <script id="template-groups" type="text/x-handlebars-template">
+        {{#if groups}}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Group Title</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#groups}}
+                    <tr data-group-id="{{id}}" data-group-title="{{title}}">
+                        <td>{{title}}</td>
+                        <td>
+                            <a title="edit" data-target="ModalEditContactGroup" class="btnEditGroupModal modal-button">
+                                <span class="icon is-small">
+                                    <i class="far fa-edit"></i>
+                                </span>
+                            </a>
+                            <a title="delete" class="btn-remove-group"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                    {{/groups}}
+                </tbody>
+            </table>
+        {{else}}
+            <p>No contact groups are found!</p>
+        {{/if}}
+    </script>
+
+    <script id="template-contacts" type="text/x-handlebars-template">
+        {{#if contacts}}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Group</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#contacts}}
+                    <tr data-contact-id="{{id}}" data-firstname="{{firstName}}" data-lastname="{{lastName}}" data-mobile="{{mobile}}" data-email="{{email}}" data-group-id="{{groupId}}">
+                        <td>{{firstName}} {{lastName}}</td>
+                        <td>{{mobile}}</td>
+                        <td>{{email}}</td>
+                        <td>
+                            {{#if groupTitle}}
+                                {{groupTitle}}
+                            {{else}}
+                                Uncategorized
+                            {{/if}}
+                        </td>
+                        <td>
+                            <a title="edit" data-target="ModalEditContact" class="btnEditContactModal modal-button">
+                                <span class="icon is-small">
+                                    <i class="far fa-edit"></i>
+                                </span>
+                            </a>
+                            <a title="delete" class="btn-remove-contact"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                    {{/contacts}}
+                </tbody>
+            </table>
+        {{else}}
+            <div>
+                Sorry! No contacts are available.
+            </div>
+        {{/if}}
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.8.1/parsley.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.7.2/idbstore.min.js"></script>
+
+    <script src="./js/group-repository.js"></script>
+    <script src="./js/contact-repository.js"></script>
+    <script src="./js/main.js"></script>
+
+</body>
 </html>
