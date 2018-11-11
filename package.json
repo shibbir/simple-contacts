@@ -7,7 +7,7 @@
     "url": "https://github.com/shibbir/simple-contact-manager.git"
   },
   "keywords": [
-    "indexed db",
+    "indexeddb",
     "html5",
     "bulma",
     "handlebars",
@@ -18,12 +18,5 @@
   "bugs": {
     "url": "https://github.com/shibbir/simple-contact-manager/issues"
   },
-  "homepage": "https://shibbir.github.io/simple-contact-manager/",
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.5.0",
-    "bulma": "^0.7.2",
-    "handlebars": "^4.0.12",
-    "idb-wrapper": "^1.7.2",
-    "parsleyjs": "^2.8.1"
-  }
+  "homepage": "https://shibbir.github.io/simple-contact-manager/"
 }
