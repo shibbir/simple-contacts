@@ -1,80 +1,104 @@
 (function ($) {
-    var groupRepository = new GroupRepository(),
-        contactRepository = new ContactRepository();
+    let groupRepository = new GroupRepository();
+    let contactRepository = new ContactRepository();
 
-    groupRepository.initGroupStore();
+    groupRepository.initStore();
 
     $(document).on("CustomEvent::GroupStoreModified", function () {
-        contactRepository.initContactStore();
+        contactRepository.initStore();
     });
 
-    $("#ModalAddContact").on("hidden.bs.modal", function () {
-        $("#contact-add-form").parsley().destroy();
+    let modalButtons = document.querySelectorAll(".modal-button");
+
+    [].forEach.call(modalButtons, function(el) {
+        el.addEventListener("click", function() {
+            let targetEl = document.getElementById(el.dataset.target);
+            targetEl.classList.add("is-active");
+
+            $(targetEl.querySelector("form")).parsley().destroy();
+        });
     });
+
+    let modalCloseButtons = document.querySelectorAll(".modal-close");
+
+    [].forEach.call(modalCloseButtons, function(el) {
+        el.addEventListener("click", function() {
+            el.parentElement.classList.remove("is-active");
+        });
+    });
+
     $("#ModalAddContact").on("show.bs.modal", function () {
-        groupRepository.refreshGroups();
+        groupRepository.refresh();
     });
-    $("#ModalEditContact").on("hidden.bs.modal", function () {
-        $("#contact-edit-form").parsley().destroy();
-    });
-    $("#ModalAddContactGroup").on("hidden.bs.modal", function () {
-        $("#group-add-form").parsley().destroy();
-    });
+
     $("#ModalEditContactGroup").on("hidden.bs.modal", function () {
         $("#group-edit-form").parsley().destroy();
-        groupRepository.refreshGroups();
+        groupRepository.refresh();
     });
 
     $(document).on("click", ".btnEditGroupModal", function () {
-        var $this = $(this).closest("tr");
+        let root = this.closest("tr");
+        document.getElementById("edited-group-id").value = root.dataset.groupId;
+        document.getElementById("edited-group-title").value = root.dataset.groupTitle;
 
-        document.getElementById("HiddenGroupId").value = $this.data("groupId");
-        document.getElementById("EditGroupName").value = $this.data("groupName");
+        let targetEl = document.getElementById(this.dataset.target);
+        targetEl.classList.add("is-active");
+
+        $(targetEl.querySelector("form")).parsley().destroy();
     });
 
-    $(document).on("click", "#editGroup", function () {
-        groupRepository.editGroup();
+    $(document).on("click", "#btn-edit-group", function () {
+        groupRepository.edit();
     });
 
     $(document).on("click", ".btnEditContactModal", function () {
-        var $this = $(this).closest("tr");
+        let root = this.closest("tr");
 
-        document.getElementById("HiddenContactId").value = $this.data("contactid");
-        document.getElementById("EditFirstName").value = $this.data("firstname");
-        document.getElementById("EditLastName").value = $this.data("lastname");
-        document.getElementById("EditMobile").value = $this.data("mobile");
-        document.getElementById("EditEmail").value = $this.data("email");
+        document.getElementById("edited-contact-id").value = root.dataset.contactId;
+        document.getElementById("edited-first-name").value = root.dataset.firstname;
+        document.getElementById("edited-last-name").value = root.dataset.lastname;
+        document.getElementById("edited-mobile").value = root.dataset.mobile;
+        document.getElementById("edited-email").value = root.dataset.email;
 
-        var select = document.getElementById("Group");
+        let select = document.getElementById("group-id");
 
-        for(var i = 0; i < select.options.length; i++) {
-            if(select.options[i].value == $this.data("group")) {
-                $("select").val($this.data("group"));
-                break;
+        if(select) {
+            for(let i = 0; i < select.options.length; i++) {
+                if(select.options[i].value == root.dataset.groupId) {
+                    $("select").val(root.dataset.groupId);
+                    break;
+                }
             }
         }
+
+        let targetEl = document.getElementById(this.dataset.target);
+        targetEl.classList.add("is-active");
+
+        $(targetEl.querySelector("form")).parsley().destroy();
     });
 
-    $(document).on("click", "#editContact", function () {
-        contactRepository.editContact({
-            Id: document.getElementById("HiddenContactId").value,
-            FirstName: document.getElementById("EditFirstName").value,
-            LastName: document.getElementById("EditLastName").value,
-            Mobile: document.getElementById("EditMobile").value,
-            Email: document.getElementById("EditEmail").value,
-            Group: $(".updateGroupForContact select").find(":selected").val()
+    $(document).on("click", "#btn-edit-contact", function () {
+        contactRepository.edit({
+            id: +document.getElementById("edited-contact-id").value,
+            firstName: document.getElementById("edited-first-name").value,
+            lastName: document.getElementById("edited-last-name").value,
+            mobile: document.getElementById("edited-mobile").value,
+            email: document.getElementById("edited-email").value,
+            groupId: +$(".updateGroupForContact select").find(":selected").val()
         });
     });
 
     $(document).on("click", ".btn-remove-group", function () {
-        if(confirm("Are you sure you want to delete this record?")) {
-            var groupId = $(this).closest("tr").data("groupId");
-            groupRepository.deleteGroup(groupId);
+        if(confirm("Are you sure?")) {
+            let id = this.closest("tr").dataset.groupId;
+            groupRepository.remove(+id);
         }
     });
 
     $(document).on("click", ".btn-remove-contact", function () {
-        var contactId = $(this).parents("td").data("contactId");
-        contactRepository.deleteContact(contactId);
+        if(confirm("Are you sure?")) {
+            let id = this.closest("tr").dataset.contactId;
+            contactRepository.remove(+id);
+        }
     });
 })(jQuery);

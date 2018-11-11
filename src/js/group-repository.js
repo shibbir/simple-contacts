@@ -1,130 +1,107 @@
-var GroupRepository = function () {};
+let GroupRepository = function () {};
 
 GroupRepository.prototype = function () {
-    var groups, groupNodeCache = {};
+    let groupStore;
 
-    var initGroupStore = function () {
-        groups = new IDBStore({
+    let initStore = function () {
+        groupStore = new IDBStore({
             storeName: "group",
             dbVersion: 1,
+            keyPath: "id",
             autoIncrement: true,
-            onStoreReady: refreshGroups
+            onStoreReady: refresh
         });
 
-        ["addGroup", "GroupName"].forEach(function(id) {
-            groupNodeCache[id] = document.getElementById(id);
-        });
-
-        groupNodeCache.addGroup.addEventListener("click", createNewGroup);
+        document.getElementById("btn-add-group").addEventListener("click", create);
     };
 
-    var refreshGroups = function () {
-        groups.getAll(groupList);
+    let refresh = function () {
+        groupStore.getAll(function (data) {
+            Handlebars.registerHelper("disableAddContactButton", function() {
+                $("#addContact").attr("disabled", true);
+            });
+            Handlebars.registerHelper("enableAddContactButton", function() {
+                $("#addContact").removeAttr("disabled");
+            });
+
+            let source = $("#template-groups").html();
+            let template = Handlebars.compile(source);
+            $("#placeholder-groups").html(template({ groups: data }));
+
+            source = $("#template-group-dropdown").html();
+            template = Handlebars.compile(source);
+            $(".placeholder-group-dropdown").html(template({ groups: data }));
+
+            $(document).trigger("CustomEvent::GroupStoreModified");
+        });
     };
 
-    var groupList = function (data) {
-        Handlebars.registerHelper("disableAddContactButton", function() {
-            $("#addContact").attr("disabled", true);
-        });
-        Handlebars.registerHelper("enableAddContactButton", function() {
-            $("#addContact").removeAttr("disabled");
-        });
+    let create = function () {
+        let parsleyForm = $("#group-add-form").parsley();
 
-        var source = $("#template-groups").html();
-        var template = Handlebars.compile(source);
-        $("#placeholder-groups").html(template({ groups: data }));
+        parsleyForm.validate();
 
-        source = $("#template-group-dropdown").html();
-        template = Handlebars.compile(source);
-        $(".placeholder-group-dropdown").html(template({ groups: data }));
+        if(parsleyForm.isValid()) {
+            groupStore.getAll(function (groups) {
+                let newGroup = {};
+                let dataExists = false;
 
-        $(document).trigger("CustomEvent::GroupStoreModified");
-    };
+                newGroup["title"] = document.getElementById("group-title").value;
 
-    var isDataAlreadyExist = function (oldData) {
-        var newData = {}, dataExists = false;
+                groups.forEach(function (group) {
+                    if(newGroup.title.toLowerCase() === group.title.toLowerCase()) {
+                        dataExists = true;
+                    }
+                });
 
-        ["GroupName"].forEach(function(key) {
-            var value = groupNodeCache[key].value.trim();
-            newData[key] = value;
-        });
-
-        oldData.forEach(function (key) {
-            if(newData.GroupName.toLowerCase() === key.GroupName.toLowerCase()) {
-                $(".notification-add-group").html("<div class=\"alert alert-danger\"><span>Record already exists!</span></div>").fadeIn(200).delay(1500).fadeOut(300);
-                dataExists = true;
-            }
-        });
-
-        if(!dataExists) {
-            addGroupIntoDb(newData);
-        }
-    };
-
-    var isGroupNameAlreadyExistWhenEdit = function (allData) {
-        var editedGroup = {}, dataExists = false;
-        editedGroup = {
-            id: parseInt(document.getElementById("HiddenGroupId").value, 10),
-            GroupName: document.getElementById("EditGroupName").value
-        };
-
-        allData.forEach(function (key) {
-            if(editedGroup.id !== key.id) {
-                if(editedGroup.GroupName.toLowerCase() === key.GroupName.toLowerCase()) {
-                    $(".notification-edit-group").html("<div class=\"alert alert-danger\"><span>Record already exists!</span></div>").fadeIn(200).delay(1500).fadeOut(300);
-                    dataExists = true;
+                if(!dataExists) {
+                    groupStore.put(newGroup, function() {
+                        $("input").val("");
+                        refresh();
+                    });
                 }
-            }
-        });
-
-        if(!dataExists) {
-            editGroupIntoDb(editedGroup);
+            });
         }
     };
 
-    var createNewGroup = function () {
-        var parsleyForm = $("#group-add-form").parsley();
+    let edit = function (group) {
+        let parsleyForm = $("#group-edit-form").parsley();
 
         parsleyForm.validate();
 
         if(parsleyForm.isValid()) {
-            groups.getAll(isDataAlreadyExist);
+            groupStore.getAll(function (groups) {
+                let editedGroup = {}, dataExists = false;
+                editedGroup = {
+                    id: +document.getElementById("edited-group-id").value,
+                    title: document.getElementById("edited-group-title").value
+                };
+
+                groups.forEach(function (group) {
+                    if(editedGroup.id !== group.id) {
+                        if(editedGroup.title.toLowerCase() === group.title.toLowerCase()) {
+                            dataExists = true;
+                        }
+                    }
+                });
+
+                if(!dataExists) {
+                    groupStore.put(editedGroup, function() {
+                        refresh();
+                    });
+                }
+            });
         }
     };
 
-    var addGroupIntoDb = function (data) {
-        groups.put(data, function() {
-            $("input").val("");
-            refreshGroups();
-            $(".notification-add-group").html("<div class=\"alert alert-success\"><span>New record created.</span></div>").fadeIn(200).delay(1500).fadeOut(300);
-        });
-    };
-
-    var editGroupIntoDb = function (data) {
-        groups.put(data, function() {
-            refreshGroups();
-            $(".notification-edit-group").html("<div class=\"alert alert-success\"><span>The record has been updated.</span></div>").fadeIn(200).delay(1500).fadeOut(300);
-        });
-    };
-
-    var editGroup = function () {
-        var parsleyForm = $("#group-edit-form").parsley();
-
-        parsleyForm.validate();
-
-        if(parsleyForm.isValid()) {
-            groups.getAll(isGroupNameAlreadyExistWhenEdit);
-        }
-    };
-
-    var deleteGroup = function (id) {
-        groups.remove(id, refreshGroups);
+    let remove = function (id) {
+        groupStore.remove(id, refresh);
     };
 
     return {
-        initGroupStore: initGroupStore,
-        editGroup: editGroup,
-        deleteGroup: deleteGroup,
-        refreshGroups: refreshGroups
+        initStore,
+        edit,
+        remove,
+        refresh
     };
 }();

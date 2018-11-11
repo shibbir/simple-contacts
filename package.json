@@ -1,28 +1,29 @@
 {
   "name": "simple-contact-manager",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A super simple contact manager using HTML5 IndexedDb",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shibbir/SimpleContactManager.git"
+    "url": "https://github.com/shibbir/simple-contact-manager.git"
   },
   "keywords": [
     "indexed db",
     "html5",
-    "bootstrap",
+    "bulma",
     "handlebars",
     "parsleyjs"
   ],
-  "author": "Shibbir Ahmed <shibbir.cse@gmail.com>",
+  "author": "Shibbir Ahmed <shibbir.io@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shibbir/SimpleContactManager/issues"
+    "url": "https://github.com/shibbir/simple-contact-manager/issues"
   },
-  "homepage": "https://shibbir.github.io/SimpleContactManager/",
+  "homepage": "https://shibbir.github.io/simple-contact-manager/",
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "handlebars": "^4.0.5",
-    "idb-wrapper": "^1.7.0",
-    "parsleyjs": "^2.4.4"
+    "@fortawesome/fontawesome-free": "^5.5.0",
+    "bulma": "^0.7.2",
+    "handlebars": "^4.0.12",
+    "idb-wrapper": "^1.7.2",
+    "parsleyjs": "^2.8.1"
   }
 }

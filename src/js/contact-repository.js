@@ -1,97 +1,80 @@
-var ContactRepository = function () {};
+let ContactRepository = function () {};
 
 ContactRepository.prototype = function () {
-    var contacts, contactNodeCache = {};
+    let contactStore, elementNodeCache = {};
 
-    var initContactStore = function () {
-        contacts = new IDBStore({
+    let initStore = function () {
+        contactStore = new IDBStore({
             storeName: "contact",
             dbVersion: 1,
-            keyPath: "contactid",
+            keyPath: "id",
             autoIncrement: true,
-            onStoreReady: refreshContacts
+            onStoreReady: refresh
         });
 
-        ["addContact", "FirstName", "LastName", "Mobile", "Email"].forEach(function(id) {
-            contactNodeCache[id] = document.getElementById(id);
+        ["btn-add-contact", "first-name", "last-name", "mobile", "email", "group-id"].forEach(function(id) {
+            elementNodeCache[id] = document.getElementById(id);
         });
 
-        contactNodeCache.addContact.addEventListener("click", createContact);
+        elementNodeCache["btn-add-contact"].addEventListener("click", create);
     };
 
-    var refreshContacts = function () {
-        contacts.getAll(contactList);
-    };
+    function refresh () {
+        contactStore.getAll(function (data) {
+            let groupArray = [];
 
-    var contactList = function (data) {
-        var groupArray = [];
+            $("#placeholder-groups table tbody tr").each(function () {
+                groupArray[this.dataset.groupId] = this.dataset.groupTitle;
+            });
 
-        $("#placeholder-groups table tbody tr").each(function () {
-            var $this = $(this);
-            groupArray[$this.data("groupId")] = $this.data("groupName");
+            data.forEach(function (contact) {
+                contact.groupTitle = groupArray[contact.groupId];
+            });
+
+            let source = $("#template-contacts").html();
+            let template = Handlebars.compile(source);
+            $("#placeholder-contacts").html(template({ contacts: data }));
         });
+    }
 
-        data.forEach(function (contact) {
-            contact.GroupName = groupArray[contact.Group];
-        });
-
-        var source = $("#template-contacts").html();
-        var template = Handlebars.compile(source);
-        $("#placeholder-contacts").html(template({ contacts: data }));
-    };
-
-    var createContact = function () {
-        var parsleyForm = $("#contact-add-form").parsley();
+    let create = function () {
+        let parsleyForm = $("#contact-add-form").parsley();
 
         parsleyForm.validate();
 
         if(parsleyForm.isValid()) {
-            var data = {}, value = "";
+            let data = {
+                firstName: elementNodeCache["first-name"].value,
+                lastName: elementNodeCache["last-name"].value,
+                email: elementNodeCache["email"].value,
+                mobile: elementNodeCache["mobile"].value,
+                groupId: +elementNodeCache["group-id"].value
+            };
 
-            ["FirstName", "LastName", "Mobile", "Email", "Group"].forEach(function(key) {
-                if(key === "Group") {
-                    value = document.getElementById(key).value.trim();
-                } else {
-                    value = contactNodeCache[key].value.trim();
-                }
-                data[key] = value;
-            });
-
-            contacts.put(data, function() {
-                refreshContacts();
+            contactStore.put(data, function() {
+                refresh();
                 $("input[type=text], input[type=email], select").val("");
-                $(".notification-add-contact").html("<div class=\"alert alert-success\"><span>New record created.</span></div>").fadeIn(200).delay(1500).fadeOut(300);
             });
         }
     };
 
-    var editContact = function (contact) {
-        var data = {
-            contactid: parseInt(contact.Id, 10),
-            FirstName: contact.FirstName.trim(),
-            LastName: contact.LastName.trim(),
-            Mobile: contact.Mobile.trim(),
-            Email: contact.Email.trim(),
-            Group: contact.Group
-        };
-
-        var parsleyForm = $("#contact-edit-form").parsley();
+    let edit = function (contact) {
+        let parsleyForm = $("#contact-edit-form").parsley();
 
         parsleyForm.validate();
 
         if(parsleyForm.isValid()) {
-            contacts.put(data, refreshContacts);
-            $(".notification-edit-contact").html("<div class=\"alert alert-success\"><span>The record has been updated.</span></div>").fadeIn(200).delay(1500).fadeOut(300);
+            contactStore.put(contact, refresh);
         }
     };
 
-    var deleteContact = function (id) {
-        contacts.remove(id, refreshContacts);
+    let remove = function (id) {
+        contactStore.remove(id, refresh);
     };
 
     return {
-        initContactStore: initContactStore,
-        editContact: editContact,
-        deleteContact: deleteContact
+        initStore,
+        edit,
+        remove
     };
 }();
