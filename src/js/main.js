@@ -1,12 +1,16 @@
 (function ($) {
-    let groupRepository = new GroupRepository();
+    const db = new Dexie('dexie');
+
+    db.version(1).stores({
+        groups: '++id, &title',
+        contacts: '++id, firstName, lastName, mobile, &email, groupId'
+    });
+
+    let groupRepository = new GroupRepository(db.groups);
     let contactRepository = new ContactRepository();
 
-    groupRepository.initStore();
-
-    $(document).on("CustomEvent::GroupStoreModified", function () {
-        contactRepository.initStore();
-    });
+    //groupRepository.init();
+    contactRepository.initStore();
 
     let modalButtons = document.querySelectorAll(".modal-button");
 

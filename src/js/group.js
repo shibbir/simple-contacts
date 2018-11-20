@@ -1,49 +1,29 @@
-const GroupRepository = function (store) {
-    this.store = store;
-};
-
-GroupRepository.prototype = function () {
-    let groupStore;
-
-    // let init = function () {
-    //     groupStore = new IDBStore({
-    //         storeName: "group",
-    //         dbVersion: 1,
-    //         keyPath: "id",
-    //         autoIncrement: true,
-    //         onStoreReady: refresh
-    //     });
-
-    //     document.getElementById("btn-add-group").addEventListener("click", create);
-    // };
-
-    refresh();
-
-    document.getElementById("btn-add-group").addEventListener("click", create);
-
-    function refresh () {
-        //groupStore.getAll(function (data) {
-
-            let data = this.store.toArray();
-
-            Handlebars.registerHelper("disableAddContactButton", function() {
-                $("#addContact").attr("disabled", true);
-            });
-            Handlebars.registerHelper("enableAddContactButton", function() {
-                $("#addContact").removeAttr("disabled");
-            });
-
-            let source = $("#template-groups").html();
-            let template = Handlebars.compile(source);
-            $("#placeholder-groups").html(template({ groups: data }));
-
-            source = $("#template-group-dropdown").html();
-            template = Handlebars.compile(source);
-            $(".placeholder-group-dropdown").html(template({ groups: data }));
-        //});
+export default class Group {
+    constructor(store) {
+        this.store = store;
+        console.log(store);
     }
 
-    function create () {
+    refresh() {
+        let data = this.store.toArray();
+
+        Handlebars.registerHelper("disableAddContactButton", function() {
+            $("#addContact").attr("disabled", true);
+        });
+        Handlebars.registerHelper("enableAddContactButton", function() {
+            $("#addContact").removeAttr("disabled");
+        });
+
+        let source = $("#template-groups").html();
+        let template = Handlebars.compile(source);
+        $("#placeholder-groups").html(template({ groups: data }));
+
+        source = $("#template-group-dropdown").html();
+        template = Handlebars.compile(source);
+        $(".placeholder-group-dropdown").html(template({ groups: data }));
+    }
+
+    create() {
         let parsleyForm = $("#group-add-form").parsley();
 
         parsleyForm.validate();
@@ -75,7 +55,7 @@ GroupRepository.prototype = function () {
         }
     }
 
-    let edit = function (group) {
+    update() {
         let parsleyForm = $("#group-edit-form").parsley();
 
         parsleyForm.validate();
@@ -103,15 +83,9 @@ GroupRepository.prototype = function () {
                 }
             });
         }
-    };
+    }
 
-    let remove = function (id) {
+    delete (id) {
         groupStore.remove(id, refresh);
     };
-
-    return {
-        edit,
-        remove,
-        refresh
-    };
-}();
+}

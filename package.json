@@ -2,10 +2,6 @@
   "name": "simple-contact-manager",
   "version": "3.0.0",
   "description": "A super simple contact manager using HTML5 IndexedDb",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/shibbir/simple-contact-manager.git"
-  },
   "keywords": [
     "indexeddb",
     "html5",
@@ -15,8 +11,14 @@
   ],
   "author": "Shibbir Ahmed <shibbir.io@outlook.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shibbir/simple-contact-manager/issues"
+  "homepage": "https://shibbir.github.io/simple-contact-manager/",
+  "dependencies": {},
+  "scripts": {
+    "build": "babel src -d dist"
   },
-  "homepage": "https://shibbir.github.io/simple-contact-manager/"
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6"
+  }
 }
