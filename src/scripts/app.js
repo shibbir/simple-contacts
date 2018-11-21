@@ -12,3 +12,7 @@ class App {
         this.Group = new Group(db.groups);
     }
 }
+
+let app = new App();
+
+app.Group.refresh();

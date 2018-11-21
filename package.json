@@ -12,13 +12,32 @@
   "author": "Shibbir Ahmed <shibbir.io@outlook.com>",
   "license": "MIT",
   "homepage": "https://shibbir.github.io/simple-contact-manager/",
-  "dependencies": {},
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.5.0",
+    "bulma": "^0.7.2",
+    "dexie": "^2.0.4",
+    "handlebars": "^4.0.12",
+    "jquery": "^3.3.1",
+    "parsleyjs": "^2.8.1"
+  },
   "scripts": {
-    "build": "babel src -d dist"
+    "start": "gulp"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6"
+    "@babel/preset-env": "^7.1.6",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-concat-css": "^3.1.0",
+    "gulp-connect": "^5.6.1",
+    "gulp-inject": "^5.0.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-uglify": "^3.0.1",
+    "merge-stream": "^1.0.1",
+    "rollup": "^0.67.3",
+    "rollup-plugin-babel": "^4.0.3"
   }
 }

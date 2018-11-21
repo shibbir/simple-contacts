@@ -1,7 +1,6 @@
 export default class Group {
     constructor(store) {
         this.store = store;
-        console.log(store);
     }
 
     refresh() {
