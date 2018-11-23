@@ -4,14 +4,15 @@ const babel = require('rollup-plugin-babel');
 const merge = require('merge-stream');
 const del = require('del');
 const plugins = require('gulp-load-plugins')({ lazy: true });
+const webroot = 'webroot';
 
 function clean() {
-    return del('dist/**/*');
+    return del(`${webroot}/**/*`);
 }
 
 function bundle(cb) {
     rollup.rollup({
-        input: './src/scripts/app.js',
+        input: 'src/scripts/app.js',
         plugins: [
             babel({
                 exclude: 'node_modules/**'
@@ -19,7 +20,7 @@ function bundle(cb) {
         ]
     }).then(bundle => {
         return bundle.write({
-            file: './dist/app.js',
+            file: `${webroot}/app.js`,
             format: 'iife'
         });
     });
@@ -29,47 +30,44 @@ function bundle(cb) {
 
 function vendors() {
     let scripts = src([
-        './node_modules/jquery/dist/jquery.slim.min.js',
-        './node_modules/handlebars/dist/handlebars.min.js',
-        './node_modules/parsleyjs/dist/parsley.min.js',
-        './node_modules/@fortawesome/fontawesome-free/js/all.min.js',
-        './node_modules/dexie/dist/dexie.min.js'
+        'node_modules/jquery/dist/jquery.slim.min.js',
+        'node_modules/handlebars/dist/handlebars.min.js',
+        'node_modules/parsleyjs/dist/parsley.min.js',
+        'node_modules/@fortawesome/fontawesome-free/js/all.min.js',
+        'node_modules/dexie/dist/dexie.min.js'
     ])
     .pipe(plugins.concat('vendor.js'))
     .pipe(plugins.uglify())
-    .pipe(dest('./dist'));
+    .pipe(dest(webroot));
 
     let styles = src([
-        './node_modules/bulma/css/bulma.min.css',
-        './src/styles/app.css',
+        'node_modules/bulma/css/bulma.min.css',
+        'src/styles/app.css',
     ])
     .pipe(plugins.concatCss("app.css"))
     .pipe(plugins.cleanCss())
-    .pipe(dest('./dist'));
+    .pipe(dest(webroot));
 
     return merge(styles, scripts);
 }
 
 function copy() {
-    return src('./src/index.html').pipe(dest('./dist'));
+    return src('src/index.html').pipe(dest(webroot));
 }
 
 function inject() {
-    let target = src('./dist/index.html');
-    let sources = src(['./dist/vendor.js', './dist/app.js', './dist/**/*.css'], {read: false});
+    let target = src(`${webroot}/index.html`);
+    let sources = src([`${webroot}/vendor.js`, `${webroot}/app.js`, `${webroot}/**/*.css`], {read: false});
 
-    return target.pipe(plugins.inject(sources, {relative: true})).pipe(dest('./dist'));
+    return target.pipe(plugins.inject(sources, {relative: true})).pipe(dest(webroot));
 }
 
 function server() {
     plugins.connect.server({
-        root: 'dist'
+        root: webroot
     });
 }
 
-watch(['src/**/*'], function(cb) {
-    series(clean, bundle, copy, inject);
-    cb();
-});
+watch('src/**/*', series(bundle, copy, inject));
 
 exports.default = series(clean, vendors, bundle, copy, inject, server);

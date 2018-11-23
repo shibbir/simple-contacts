@@ -1,4 +1,5 @@
 import Group from './group';
+import Dexie from 'dexie';
 
 class App {
     constructor() {
@@ -10,6 +11,25 @@ class App {
         });
 
         this.Group = new Group(db.groups);
+
+        let modalButtons = document.querySelectorAll(".modal-button");
+
+        [].forEach.call(modalButtons, function(el) {
+            el.addEventListener("click", function() {
+                let targetEl = document.getElementById(el.dataset.target);
+                targetEl.classList.add("is-active");
+
+                $(targetEl.querySelector("form")).parsley().destroy();
+            });
+        });
+
+        let modalCloseButtons = document.querySelectorAll(".modal-close");
+
+        [].forEach.call(modalCloseButtons, function(el) {
+            el.addEventListener("click", function() {
+                el.parentElement.classList.remove("is-active");
+            });
+        });
     }
 }
 
