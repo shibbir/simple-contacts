@@ -256,23 +256,17 @@
     </div>
 
     <script id="template-group-dropdown" type="text/x-handlebars-template">
-        {{#if groups}}
-            <label class="label">Contact Group</label>
-            <div class="control">
-                <div class="select">
-                    <select id="group-id" required>
-                        <option value="">Select group</option>
-                        {{#groups}}
-                            <option value="{{id}}">{{title}}</option>
-                        {{/groups}}
-                    </select>
-                </div>
+        <label class="label">Contact Group</label>
+        <div class="control">
+            <div class="select">
+                <select id="group-id" required>
+                    <option value="">Select group</option>
+                    {{#groups}}
+                        <option value="{{id}}">{{title}}</option>
+                    {{/groups}}
+                </select>
             </div>
-           {{#enableAddContactButton}}{{/enableAddContactButton}}
-        {{else}}
-            {{#disableAddContactButton}}{{/disableAddContactButton}}
-            <p>No contact groups are found!</p>
-        {{/if}}
+        </div>
     </script>
 
     <script id="template-groups" type="text/x-handlebars-template">
@@ -294,7 +288,7 @@
                                     <i class="far fa-edit"></i>
                                 </span>
                             </a>
-                            <a title="delete" class="btn-remove-group"><i class="far fa-trash-alt"></i></a>
+                            <a title="delete" id="btn-remove-group"><i class="far fa-trash-alt"></i></a>
                         </td>
                     </tr>
                     {{/groups}}

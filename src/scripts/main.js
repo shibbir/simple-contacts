@@ -1,15 +1,8 @@
 (function ($) {
-    const db = new Dexie('dexie');
-
-    db.version(1).stores({
-        groups: '++id, &title',
-        contacts: '++id, firstName, lastName, mobile, &email, groupId'
-    });
-
-    let groupRepository = new GroupRepository(db.groups);
+    let groupRepository = new GroupRepository();
     let contactRepository = new ContactRepository();
 
-    //groupRepository.init();
+    groupRepository.init();
     contactRepository.initStore();
 
     let modalButtons = document.querySelectorAll(".modal-button");

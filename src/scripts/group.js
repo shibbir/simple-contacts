@@ -2,26 +2,43 @@ export default class Group {
     constructor(store) {
         this.store = store;
 
-        document.getElementById("btn-add-group").addEventListener("click", this.create.bind(this));
+        this.refresh();
+        this.bindDomEvents();
+    }
+
+    bindDomEvents() {
+        let _this = this;
+
+        document.getElementById('btn-add-group').addEventListener('click', this.create.bind(this));
+
+        $(document).on("click", ".btnEditGroupModal", function () {
+            let root = this.closest("tr");
+            document.getElementById("edited-group-id").value = root.dataset.groupId;
+            document.getElementById("edited-group-title").value = root.dataset.groupTitle;
+    
+            let targetEl = document.getElementById(this.dataset.target);
+            targetEl.classList.add("is-active");
+    
+            $(targetEl.querySelector("form")).parsley().destroy();
+        });
+    
+        $(document).on("click", "#btn-edit-group", () => this.update());
+
+        $(document).on("click", "#btn-remove-group", function() {
+            if(confirm("Are you sure?")) {
+                let id = this.closest("tr").dataset.groupId;
+                _this.delete(+id);
+            }
+        });
     }
 
     refresh() {
-        Handlebars.registerHelper("disableAddContactButton", function() {
-            $("#addContact").attr("disabled", true);
-        });
-        Handlebars.registerHelper("enableAddContactButton", function() {
-            $("#addContact").removeAttr("disabled");
-        });
-
-        let source = $("#template-groups").html();
-        let template = Handlebars.compile(source);
-
-        source = $("#template-group-dropdown").html();
-        template = Handlebars.compile(source);
-
-        this.store.toArray().then(function successCallback(groups) {
-            $("#placeholder-groups").html(template({ groups }));
-            $(".placeholder-group-dropdown").html(template({ groups }));
+        this.store.toArray().then(function(groups) {
+            let groupTemplate = Handlebars.compile(document.getElementById('template-groups').innerHTML);
+            let groupDropdownTemplate = Handlebars.compile(document.getElementById('template-group-dropdown').innerHTML);
+            
+            document.getElementById('placeholder-groups').innerHTML = groupTemplate({ groups });
+            document.querySelector('.placeholder-group-dropdown').innerHTML = groupDropdownTemplate({ groups });
         });
     }
 
@@ -31,31 +48,9 @@ export default class Group {
         parsleyForm.validate();
 
         if(parsleyForm.isValid()) {
-            this.store.toArray().then(groups => {
-                let newGroup = {};
-                let dataExists = false;
-
-                newGroup["title"] = document.getElementById("group-title").value;
-
-                // groups.forEach(function (group) {
-                //     if(newGroup.title.toLowerCase() === group.title.toLowerCase()) {
-                //         dataExists = true;
-                //     }
-                // });
-
-                //if(!dataExists) {
-                    this.store.add({
-                        title: document.getElementById("group-title").value
-                    });
-
-                    this.refresh();
-
-                    // groupStore.put(newGroup, function() {
-                    //     $("input").val("");
-                    //     refresh();
-                    // });
-                //}
-            });
+            this.store.add({
+                title: document.getElementById("group-title").value
+            }).then(() => this.refresh()).catch(error => console.error(error));
         }
     }
 
@@ -65,31 +60,14 @@ export default class Group {
         parsleyForm.validate();
 
         if(parsleyForm.isValid()) {
-            groupStore.getAll(function (groups) {
-                let editedGroup = {}, dataExists = false;
-                editedGroup = {
-                    id: +document.getElementById("edited-group-id").value,
-                    title: document.getElementById("edited-group-title").value
-                };
-
-                groups.forEach(function (group) {
-                    if(editedGroup.id !== group.id) {
-                        if(editedGroup.title.toLowerCase() === group.title.toLowerCase()) {
-                            dataExists = true;
-                        }
-                    }
-                });
-
-                if(!dataExists) {
-                    groupStore.put(editedGroup, function() {
-                        refresh();
-                    });
-                }
-            });
+            this.store.put({
+                id: +document.getElementById("edited-group-id").value,
+                title: document.getElementById("edited-group-title").value
+            }).then(() => this.refresh()).catch(error => console.error(error));
         }
     }
 
-    delete (id) {
-        groupStore.remove(id, refresh);
-    };
+    delete(id) {
+        this.store.delete(id).then(() => this.refresh());
+    }
 }

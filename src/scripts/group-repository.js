@@ -5,24 +5,20 @@ const GroupRepository = function (store) {
 GroupRepository.prototype = function () {
     let groupStore;
 
-    // let init = function () {
-    //     groupStore = new IDBStore({
-    //         storeName: "group",
-    //         dbVersion: 1,
-    //         keyPath: "id",
-    //         autoIncrement: true,
-    //         onStoreReady: refresh
-    //     });
+    let init = function () {
+        groupStore = new IDBStore({
+            storeName: "group",
+            dbVersion: 1,
+            keyPath: "id",
+            autoIncrement: true,
+            onStoreReady: refresh
+        });
 
-    //     document.getElementById("btn-add-group").addEventListener("click", create);
-    // };
-
-    refresh();
-
-    document.getElementById("btn-add-group").addEventListener("click", create);
+        document.getElementById("btn-add-group").addEventListener("click", create);
+    };
 
     function refresh () {
-        //groupStore.getAll(function (data) {
+        groupStore.getAll(function (data) {
 
             let data = this.store.toArray();
 
@@ -40,7 +36,7 @@ GroupRepository.prototype = function () {
             source = $("#template-group-dropdown").html();
             template = Handlebars.compile(source);
             $(".placeholder-group-dropdown").html(template({ groups: data }));
-        //});
+        });
     }
 
     function create () {
@@ -110,6 +106,7 @@ GroupRepository.prototype = function () {
     };
 
     return {
+        init,
         edit,
         remove,
         refresh

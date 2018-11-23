@@ -1,5 +1,5 @@
 import Group from './group';
-import Dexie from 'dexie';
+import Contact from './contact';
 
 class App {
     constructor() {
@@ -10,8 +10,13 @@ class App {
             contacts: '++id, firstName, lastName, mobile, &email, groupId'
         });
 
-        this.Group = new Group(db.groups);
+        new Group(db.groups);
+        new Contact(db.contacts);
 
+        this.bindDomEvents();
+    }
+
+    bindDomEvents() {
         let modalButtons = document.querySelectorAll(".modal-button");
 
         [].forEach.call(modalButtons, function(el) {
@@ -33,6 +38,4 @@ class App {
     }
 }
 
-let app = new App();
-
-app.Group.refresh();
+new App();
