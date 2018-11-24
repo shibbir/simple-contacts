@@ -1,7 +1,7 @@
 {
-  "name": "simple-contact-manager",
+  "name": "simple-contacts",
   "version": "3.0.0",
-  "description": "A super simple contact manager using HTML5 IndexedDb",
+  "description": "A browser based contacts application using IndexedDB",
   "keywords": [
     "indexeddb",
     "html5",
@@ -10,7 +10,7 @@
   ],
   "author": "Shibbir Ahmed <shibbir.io@outlook.com>",
   "license": "MIT",
-  "homepage": "https://shibbir.github.io/simple-contact-manager/",
+  "homepage": "https://shibbir.github.io/simple-contacts/",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",
     "bulma": "^0.7.2",
