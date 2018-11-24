@@ -12,336 +12,242 @@
     <!-- endinject -->
 </head>
 <body>
-    <section class="section">
-        <div class="container">
-            <header>
-                <h2 class="title">HTML5 Powered Contact Manager</h2>
-                <div class="field is-grouped is-grouped-multiline">
-                    <div class="control">
-                        <div class="tags has-addons">
-                            <span class="tag">Version</span>
-                            <span class="tag is-warning">3.0.0</span>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <div class="tags has-addons">
-                            <span class="tag">Source</span>
-                            <a class="tag is-info" href="https://github.com/shibbir/simple-contact-manager">GitHub</a>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-            </header>
-
-            <div class="columns">
-                <div class="column is-one-third">
-                    <a class="button is-primary modal-button" data-target="ModalAddContactGroup">
-                        <span class="icon is-small">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                        <span>ADD GROUP</span>
-                    </a>
-
-                    <br /><br />
-
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                Contact Group
-                            </p>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <div id="placeholder-groups"></div>
+    <div id="app">
+        <App inline-template>
+            <section class="section">
+                <div class="container">
+                    <header>
+                        <h2 class="title">HTML5 Powered Contact Manager</h2>
+                        <div class="field is-grouped is-grouped-multiline">
+                            <div class="control">
+                                <div class="tags has-addons">
+                                    <span class="tag">Version</span>
+                                    <span class="tag is-warning">3.0.0</span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags has-addons">
+                                    <span class="tag">Source</span>
+                                    <a class="tag is-info" href="https://github.com/shibbir/simple-contact-manager">GitHub</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <a class="button is-primary modal-button" data-target="ModalAddContact">
-                        <span class="icon is-small">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                        <span>ADD CONTACT</span>
-                    </a>
+                        <hr />
+                    </header>
 
-                    <br /><br />
+                    <div class="columns">
+                        <div class="column is-one-third">
+                            <group inline-template :store="db.groups">
+                                <div>
+                                    <a class="button is-primary modal-button" @click="isModalActive = true, isInsertState = true, group = {}">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-plus"></i>
+                                        </span>
+                                        <span>ADD GROUP</span>
+                                    </a>
 
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                Contacts
-                            </p>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <div id="placeholder-contacts"></div>
-                            </div>
+                                    <br /><br />
+
+                                    <div class="card">
+                                        <header class="card-header">
+                                            <p class="card-header-title">
+                                                Contact Group
+                                            </p>
+                                        </header>
+                                        <div class="card-content">
+                                            <div class="content">
+                                                <table class="table" v-if="groups.length">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Group Title</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="row in groups">
+                                                            <td>{{row.title}}</td>
+                                                            <td>
+                                                                <a title="edit" class="modal-button" @click="isModalActive = true, isInsertState = false, group = row">
+                                                                    <span class="icon is-small">
+                                                                        <i class="far fa-edit"></i>
+                                                                    </span>
+                                                                </a>
+                                                                <a title="delete" @click="remove(row.id)"><i class="far fa-trash-alt"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <p v-if="!groups.length">No contact groups are found!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal" :class="{ 'is-active': isModalActive }">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-content">
+                                            <p class="title">Contact Group</p>
+                                            <hr />
+
+                                            <form @submit.prevent="submit">
+                                                <div class="field">
+                                                    <label class="label">Title</label>
+                                                    <div class="control">
+                                                        <input type="text" class="input" name="group_title" v-model="group.title" v-validate="'required|min:4|max:15'" />
+                                                    </div>
+                                                    <p class="help is-danger">{{ errors.first('group_title') }}</p>
+                                                </div>
+                                                <div class="control">
+                                                    <button type="submit" class="button is-success">
+                                                        <span class="icon">
+                                                            <i class="fas fa-save"></i>
+                                                        </span>
+                                                        <span>Save changes</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <button class="modal-close is-large" @click="isModalActive = false"></button>
+                                    </div>
+                                </div>
+                            </group>
+                        </div>
+
+                        <div class="column">
+                            <contact inline-template :store="db.contacts">
+                                <div>
+                                    <a class="button is-primary modal-button" @click="isModalActive = true, isInsertState = true, contact = {}">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-plus"></i>
+                                        </span>
+                                        <span>ADD CONTACT</span>
+                                    </a>
+
+                                    <br /><br />
+
+                                    <div class="card">
+                                        <header class="card-header">
+                                            <p class="card-header-title">
+                                                Contacts
+                                            </p>
+                                        </header>
+                                        <div class="card-content">
+                                            <div class="content">
+                                                <table class="table" v-if="contacts.length">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Mobile</th>
+                                                            <th>Email</th>
+                                                            <th>Group</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="row in contacts">
+                                                            <td>{{row.firstName}} {{row.lastName}}</td>
+                                                            <td>{{row.mobile}}</td>
+                                                            <td>{{row.email}}</td>
+                                                            <td>{{row.group}}</td>
+                                                            <td>
+                                                                <a title="edit" class="modal-button" @click="isModalActive = true, isInsertState = false, contact = row">
+                                                                    <span class="icon is-small">
+                                                                        <i class="far fa-edit"></i>
+                                                                    </span>
+                                                                </a>
+                                                                <a title="delete" @click="remove(row.id)"><i class="far fa-trash-alt"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <p v-if="!contacts.length">Sorry! No contacts are available.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal" :class="{ 'is-active': isModalActive }">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-content">
+                                            <p class="title">Contact</p>
+                                            <hr />
+
+                                            <form @submit.prevent="submit">
+                                                <div class="field">
+                                                    <label class="label">First Name</label>
+                                                    <div class="control">
+                                                        <input type="text" name="first_name" class="input" v-model="contact.firstName" v-validate="'required|max:15'" />
+                                                    </div>
+                                                    <p class="help is-danger">{{ errors.first('first_name') }}</p>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Last Name</label>
+                                                    <div class="control">
+                                                        <input type="text" name="last_name" class="input" v-model="contact.lastName" v-validate="'required|max:15'" />
+                                                    </div>
+                                                    <p class="help is-danger">{{ errors.first('last_name') }}</p>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Mobile</label>
+                                                    <div class="control">
+                                                        <input type="text" name="mobile" class="input" v-model="contact.mobile" v-validate="'required'" />
+                                                    </div>
+                                                    <p class="help is-danger">{{ errors.first('mobile') }}</p>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Email</label>
+                                                    <div class="control">
+                                                        <input type="email" name="email" class="input" v-model="contact.email" v-validate="'required|email'" />
+                                                    </div>
+                                                    <p class="help is-danger">{{ errors.first('email') }}</p>
+                                                </div>
+
+                                                <div class="field">
+                                                    <label class="label">Contact Group</label>
+                                                    <div class="control">
+                                                        <div class="select">
+                                                            <select name="group" v-model="contact.groupId" v-validate="'required'">
+                                                                <option value="">Select group</option>
+                                                                <option v-for="group in groups" :value="group.id">{{ group.title }}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <p class="help is-danger">{{ errors.first('group') }}</p>
+                                                </div>
+
+                                                <hr />
+
+                                                <div class="field buttons is-right">
+                                                    <div class="control">
+                                                        <button type="submit" class="button is-success">
+                                                            <span class="icon">
+                                                                <i class="fas fa-save"></i>
+                                                            </span>
+                                                            <span>Save changes</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <button class="modal-close is-large" @click="isModalActive = false"></button>
+                                    </div>
+                                </div>
+                            </contact>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <footer class="footer">
-                <div class="content has-text-centered">
-                    <p>
-                        Maintained by <a href="https://shibbir.io"><strong>Shibbir Ahmed</strong></a>.
-                        The source code is licensed under <a href="http://opensource.org/licenses/mit-license.php"><strong>MIT</strong></a>.
-                    </p>
-                    <p>Made with <strong>IndexedDB</strong>, <strong>Bulma</strong>, <strong>Handlebars</strong>, <strong>Parsley</strong></p>
+                    <footer class="footer">
+                        <div class="content has-text-centered">
+                            <p>
+                                Maintained by <a href="https://shibbir.io"><strong>Shibbir Ahmed</strong></a>.
+                                The source code is licensed under <a href="http://opensource.org/licenses/mit-license.php"><strong>MIT</strong></a>.
+                            </p>
+                            <p>Made with <strong>IndexedDB</strong>, <strong>Bulma</strong>, <strong>Vue</strong>, <strong>Parsley</strong></p>
+                        </div>
+                    </footer>
                 </div>
-            </footer>
-        </div>
-    </section>
-
-    <div id="ModalAddContactGroup" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <p class="title">Add Group</p>
-            <hr />
-
-            <form id="group-add-form">
-                <div class="field">
-                    <label class="label">Title</label>
-                    <div class="control">
-                        <input type="text" class="input" id="group-title" required data-minlength="4" data-maxlength="15" />
-                    </div>
-                </div>
-                <div class="control">
-                    <button type="button" class="button is-success" id="btn-add-group">
-                        <span class="icon">
-                            <i class="fas fa-save"></i>
-                        </span>
-                        <span>Save changes</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
+            </section>
+        </App>
     </div>
-
-    <div id="ModalEditContactGroup" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <p class="title">Edit Group</p>
-            <hr />
-
-            <form id="group-edit-form">
-                <div class="field">
-                    <label class="label">Title</label>
-                    <div class="control">
-                        <input type="hidden" id="edited-group-id" />
-                        <input type="text" class="input" id="edited-group-title" required data-maxlength="20" />
-                    </div>
-                </div>
-
-                <div class="control">
-                    <button type="button" class="button is-success" id="btn-edit-group">
-                        <span class="icon">
-                            <i class="fas fa-save"></i>
-                        </span>
-                        <span>Save changes</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
-    <div id="ModalAddContact" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <p class="title">Add Contact</p>
-            <hr />
-
-            <form id="contact-add-form">
-                <div class="field">
-                    <label class="label">First Name</label>
-                    <div class="control">
-                        <input type="text" class="input" id="first-name" required data-maxlength="15" />
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Last Name</label>
-                    <div class="control">
-                        <input type="text" class="input" id="last-name" required data-maxlength="15" />
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Mobile</label>
-                    <div class="control">
-                        <input type="text" class="input" id="mobile" required data-maxlength="8" />
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                        <input type="email" class="input" id="email" required />
-                    </div>
-                </div>
-
-                <div class="placeholder-group-dropdown field"></div>
-
-                <hr />
-
-                <div class="field buttons is-right">
-                    <div class="control">
-                        <button type="button" class="button is-success" id="btn-add-contact">
-                            <span class="icon">
-                                <i class="fas fa-save"></i>
-                            </span>
-                            <span>Save changes</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
-    <div id="ModalEditContact" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <p class="title">Edit Contact</p>
-            <hr />
-
-            <form id="contact-edit-form">
-                <div class="field">
-                    <label class="label">First Name</label>
-                    <div class="control">
-                        <input type="text" class="input" id="edited-first-name" required data-maxlength="15" />
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Last Name</label>
-                    <div class="control">
-                        <input type="text" class="input" id="edited-last-name" required data-maxlength="15" />
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Mobile</label>
-                    <div class="control">
-                        <input type="text" class="input" id="edited-mobile" required data-maxlength="8" />
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                        <input type="email" class="input" id="edited-email" required />
-                    </div>
-                </div>
-
-                <div class="placeholder-group-dropdown updateGroupForContact field"></div>
-
-                <input type="hidden" id="edited-contact-id" />
-
-                <hr />
-
-                <div class="field">
-                    <div class="control">
-                        <button type="button" class="button is-success" id="btn-edit-contact">
-                            <span class="icon">
-                                <i class="fas fa-save"></i>
-                            </span>
-                            <span>Save changes</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
-    <script id="template-group-dropdown" type="text/x-handlebars-template">
-        <label class="label">Contact Group</label>
-        <div class="control">
-            <div class="select">
-                <select id="group-id" required>
-                    <option value="">Select group</option>
-                    {{#groups}}
-                        <option value="{{id}}">{{title}}</option>
-                    {{/groups}}
-                </select>
-            </div>
-        </div>
-    </script>
-
-    <script id="template-groups" type="text/x-handlebars-template">
-        {{#if groups}}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Group Title</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#groups}}
-                    <tr data-group-id="{{id}}" data-group-title="{{title}}">
-                        <td>{{title}}</td>
-                        <td>
-                            <a title="edit" data-target="ModalEditContactGroup" class="btnEditGroupModal modal-button">
-                                <span class="icon is-small">
-                                    <i class="far fa-edit"></i>
-                                </span>
-                            </a>
-                            <a title="delete" id="btn-remove-group"><i class="far fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                    {{/groups}}
-                </tbody>
-            </table>
-        {{else}}
-            <p>No contact groups are found!</p>
-        {{/if}}
-    </script>
-
-    <script id="template-contacts" type="text/x-handlebars-template">
-        {{#if contacts}}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Mobile</th>
-                        <th>Email</th>
-                        <th>Group</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#contacts}}
-                    <tr data-contact-id="{{id}}" data-firstname="{{firstName}}" data-lastname="{{lastName}}" data-mobile="{{mobile}}" data-email="{{email}}" data-group-id="{{groupId}}">
-                        <td>{{firstName}} {{lastName}}</td>
-                        <td>{{mobile}}</td>
-                        <td>{{email}}</td>
-                        <td>
-                            {{#if groupTitle}}
-                                {{groupTitle}}
-                            {{else}}
-                                Uncategorized
-                            {{/if}}
-                        </td>
-                        <td>
-                            <a title="edit" data-target="ModalEditContact" class="btnEditContactModal modal-button">
-                                <span class="icon is-small">
-                                    <i class="far fa-edit"></i>
-                                </span>
-                            </a>
-                            <a title="delete" class="btn-remove-contact"><i class="far fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                    {{/contacts}}
-                </tbody>
-            </table>
-        {{else}}
-            <div>
-                Sorry! No contacts are available.
-            </div>
-        {{/if}}
-    </script>
 
     <!-- inject:js -->
     <!-- endinject -->

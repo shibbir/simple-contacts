@@ -12,7 +12,7 @@ function clean() {
 
 function bundle(cb) {
     rollup.rollup({
-        input: 'src/scripts/app.js',
+        input: 'src/main.js',
         plugins: [
             babel({
                 exclude: 'node_modules/**'
@@ -30,9 +30,8 @@ function bundle(cb) {
 
 function vendors() {
     let scripts = src([
-        'node_modules/jquery/dist/jquery.slim.min.js',
-        'node_modules/handlebars/dist/handlebars.min.js',
-        'node_modules/parsleyjs/dist/parsley.min.js',
+        'node_modules/vue/dist/vue.js',
+        'node_modules/vee-validate/dist/vee-validate.js',
         'node_modules/@fortawesome/fontawesome-free/js/all.min.js',
         'node_modules/dexie/dist/dexie.min.js'
     ])

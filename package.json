@@ -6,8 +6,7 @@
     "indexeddb",
     "html5",
     "bulma",
-    "handlebars",
-    "parsleyjs"
+    "vue"
   ],
   "author": "Shibbir Ahmed <shibbir.io@outlook.com>",
   "license": "MIT",
@@ -16,9 +15,8 @@
     "@fortawesome/fontawesome-free": "^5.5.0",
     "bulma": "^0.7.2",
     "dexie": "^2.0.4",
-    "handlebars": "^4.0.12",
-    "jquery": "^3.3.1",
-    "parsleyjs": "^2.8.1"
+    "vee-validate": "^2.1.3",
+    "vue": "^2.5.17"
   },
   "scripts": {
     "start": "gulp"
