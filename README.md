@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/shibbir/simple-contacts.svg?branch=master)](https://travis-ci.org/shibbir/simple-contacts)
 [![Dependencies Status](https://david-dm.org/shibbir/simple-contacts/status.svg)](https://david-dm.org/shibbir/simple-contacts)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts?ref=badge_shield)
 
 ## Built with:
 
@@ -27,3 +28,6 @@ $ npm install
 
 ## License
 <a href="https://opensource.org/licenses/MIT">The MIT License</a> Copyright &copy; 2019 Shibbir Ahmed
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts?ref=badge_large)
