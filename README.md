@@ -1,6 +1,6 @@
 ## SimpleContacts
 
-> A browser based contacts application using IndexedDB
+> A browser based contact application with IndexedDB
 
 [![Build Status](https://travis-ci.org/shibbir/simple-contacts.svg?branch=master)](https://travis-ci.org/shibbir/simple-contacts)
 [![Dependencies Status](https://david-dm.org/shibbir/simple-contacts/status.svg)](https://david-dm.org/shibbir/simple-contacts)
@@ -8,19 +8,20 @@
 
 ## Built with:
 
-* [Vue](https://vuejs.org/)
-* [Bulma](https://bulma.io/)
-* [Dexie](https://dexie.org/)
-* [VeeValidate](https://baianat.github.io/vee-validate/)
-* [Rollup](https://rollupjs.org)
+- [Vue](https://vuejs.org/)
+- [Bulma](https://bulma.io/)
+- [Dexie](https://dexie.org/)
+- [VeeValidate](https://baianat.github.io/vee-validate/)
+- [Rollup](https://rollupjs.org)
 
 ## Installation
 
 You need to have [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/) installed on your machine before running the followings:
 
 ```bash
-$ git clone https://github.com/shibbir/simple-contacts.git
+$ cd /path/to/root
 $ npm install
+$ npm start
 ```
 
 ## Demo

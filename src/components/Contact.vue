@@ -45,7 +45,7 @@
                         </tbody>
                     </table>
 
-                    <p v-if="!contacts.length">Sorry! No contacts are available.</p>
+                    <p v-if="!contacts.length">Sorry! No contacts are found.</p>
                 </div>
             </div>
         </div>
