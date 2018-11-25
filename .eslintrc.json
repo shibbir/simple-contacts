@@ -1,26 +1,30 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true
   },
   "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2015,
+    "sourceType": "module"
+  },
   "rules": {
-    "semi": ["error", "always"],
-    "quotes": ["error", "double"]
-  },
-  "env": {
-    "node": true,
-    "mocha": true,
-    "browser": true,
-    "jquery": true
-  },
-  "globals": {
-    "IDBStore": true,
-    "Handlebars": true,
-    "GroupRepository": true,
-    "ContactRepository": true
+    "indent": [
+      "error",
+      4
+    ],
+    "linebreak-style": [
+      "error",
+      "windows"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ]
   }
 }

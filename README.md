@@ -12,6 +12,7 @@
 * [Bulma](https://bulma.io/)
 * [Dexie](https://dexie.org/)
 * [VeeValidate](https://baianat.github.io/vee-validate/)
+* [Rollup](https://rollupjs.org)
 
 ## Installation
 
