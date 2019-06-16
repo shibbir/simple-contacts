@@ -1,4 +1,4 @@
-## SimpleContacts
+## Simple Contacts
 
 > A browser based contact application with IndexedDB
 
@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts?ref=badge_shield)
 
-## Built with:
+## Built with
 
 - [Vue](https://vuejs.org/)
 - [Bulma](https://bulma.io/)
@@ -30,6 +30,5 @@ $ npm start
 
 ## License
 <a href="https://opensource.org/licenses/MIT">The MIT License</a> Copyright &copy; 2019 Shibbir Ahmed
-
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshibbir%2Fsimple-contacts?ref=badge_large)

@@ -1,13 +1,7 @@
-.modal-content {
-    background: white;
-    padding: 20px;
-}
-
-#placeholder-groups, #placeholder-contacts {
-    max-height: 500px;
-    overflow: auto;
-}
-
 .footer {
-    padding: 10px;
+    padding: 3rem 1.5rem 3rem;
+}
+
+.modal-card-head, .modal-card-foot {
+    border-radius: 0;
 }

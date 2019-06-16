@@ -33,7 +33,11 @@
                                             <i class="far fa-edit"></i>
                                         </span>
                                     </a>
-                                    <a title="delete" @click="remove(row.id)"><i class="far fa-trash-alt"></i></a>
+                                    <a title="delete" @click="remove(row.id)">
+                                        <span class="icon has-text-danger">
+                                            <i class="fas fa-ban"></i>
+                                        </span>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -43,35 +47,36 @@
             </div>
         </div>
 
-        <div class="modal" :class="{ 'is-active': isModalActive }">
-            <div class="modal-background"></div>
-            <div class="modal-content">
-                <p class="title">Contact Group</p>
-                <hr />
-
+        <b-modal :active.sync="isModalActive" has-modal-card>
+            <div class="modal-card">
                 <form @submit.prevent="submit">
-                    <div class="field">
-                        <label class="label">Title</label>
-                        <div class="control">
-                            <input type="text" class="input" name="group_title" v-model="group.title" v-validate="'required|min:4|max:15'" />
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Contact Group</p>
+                    </header>
+
+                    <section class="modal-card-body">
+                        <div class="field">
+                            <label class="label">Title</label>
+                            <div class="control is-clearfix">
+                                <input type="text" class="input" name="group_title" v-model="group.title" v-validate="'required|min:4|max:15'" />
+                            </div>
+                            <p class="help is-danger">{{ errors.first('group_title') }}</p>
                         </div>
-                        <p class="help is-danger">{{ errors.first('group_title') }}</p>
-                    </div>
-                    <div class="control">
+                    </section>
+
+                    <footer class="modal-card-foot">
                         <button type="submit" class="button is-success">
                             <span class="icon">
                                 <i class="fas fa-save"></i>
                             </span>
                             <span>Save changes</span>
                         </button>
-                    </div>
+                    </footer>
                 </form>
             </div>
-            <button class="modal-close is-large" @click="isModalActive = false"></button>
-        </div>
+        </b-modal>
     </div>
 </template>
-
 
 <script>
 
@@ -80,7 +85,7 @@ export default {
 
     props: ['store'],
 
-    data: function() {
+    data() {
         return {
             group: {},
             groups: [],
@@ -99,7 +104,7 @@ export default {
         }
     },
 
-    mounted: function() {
+    mounted() {
         this.refresh();
     },
 

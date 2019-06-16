@@ -29,7 +29,7 @@ export default {
         Group,
         Contact
     },
-    data: function() {
+    data() {
         return { db }
     }
 }

@@ -39,7 +39,11 @@
                                             <i class="far fa-edit"></i>
                                         </span>
                                     </a>
-                                    <a title="delete" @click="remove(row.id)"><i class="far fa-trash-alt"></i></a>
+                                    <a title="delete" @click="remove(row.id)">
+                                        <span class="icon has-text-danger">
+                                            <i class="fas fa-ban"></i>
+                                        </span>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -50,74 +54,74 @@
             </div>
         </div>
 
-        <div class="modal" :class="{ 'is-active': isModalActive }">
-            <div class="modal-background"></div>
-            <div class="modal-content">
-                <p class="title">Contact</p>
-                <hr />
-
+        <b-modal :active.sync="isModalActive" has-modal-card>
+            <div class="modal-card">
                 <form @submit.prevent="submit">
-                    <div class="field">
-                        <label class="label">First Name</label>
-                        <div class="control">
-                            <input type="text" name="first_name" class="input" v-model="contact.firstName" v-validate="'required|max:15'" />
-                        </div>
-                        <p class="help is-danger">{{ errors.first('first_name') }}</p>
-                    </div>
-                    <div class="field">
-                        <label class="label">Last Name</label>
-                        <div class="control">
-                            <input type="text" name="last_name" class="input" v-model="contact.lastName" v-validate="'required|max:15'" />
-                        </div>
-                        <p class="help is-danger">{{ errors.first('last_name') }}</p>
-                    </div>
-                    <div class="field">
-                        <label class="label">Mobile</label>
-                        <div class="control">
-                            <input type="text" name="mobile" class="input" v-model="contact.mobile" v-validate="'required'" />
-                        </div>
-                        <p class="help is-danger">{{ errors.first('mobile') }}</p>
-                    </div>
-                    <div class="field">
-                        <label class="label">Email</label>
-                        <div class="control">
-                            <input type="email" name="email" class="input" v-model="contact.email" v-validate="'required|email'" />
-                        </div>
-                        <p class="help is-danger">{{ errors.first('email') }}</p>
-                    </div>
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Contact</p>
+                    </header>
 
-                    <div class="field">
-                        <label class="label">Contact Group</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="group" v-model="contact.groupId" v-validate="'required'">
-                                    <option value="">Select group</option>
-                                    <option v-for="group in groups" :value="group.id">{{ group.title }}</option>
-                                </select>
+                    <section class="modal-card-body">
+                        <div class="field">
+                            <label class="label">First Name</label>
+                            <div class="control">
+                                <input type="text" name="first_name" class="input" v-model="contact.firstName" v-validate="'required|max:15'" />
+                            </div>
+                            <p class="help is-danger">{{ errors.first('first_name') }}</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">Last Name</label>
+                            <div class="control">
+                                <input type="text" name="last_name" class="input" v-model="contact.lastName" v-validate="'required|max:15'" />
+                            </div>
+                            <p class="help is-danger">{{ errors.first('last_name') }}</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">Mobile</label>
+                            <div class="control">
+                                <input type="text" name="mobile" class="input" v-model="contact.mobile" v-validate="'required'" />
+                            </div>
+                            <p class="help is-danger">{{ errors.first('mobile') }}</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                <input type="email" name="email" class="input" v-model="contact.email" v-validate="'required|email'" />
+                            </div>
+                            <p class="help is-danger">{{ errors.first('email') }}</p>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Contact Group</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="group" v-model="contact.groupId" v-validate="'required'">
+                                        <option value="">Select group</option>
+                                        <option v-for="group in groups" :value="group.id">{{ group.title }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <p class="help is-danger">{{ errors.first('group') }}</p>
+                        </div>
+                    </section>
+
+                    <footer class="modal-card-foot">
+                        <div class="field buttons is-right">
+                            <div class="control">
+                                <button type="submit" class="button is-success">
+                                    <span class="icon">
+                                        <i class="fas fa-save"></i>
+                                    </span>
+                                    <span>Save changes</span>
+                                </button>
                             </div>
                         </div>
-                        <p class="help is-danger">{{ errors.first('group') }}</p>
-                    </div>
-
-                    <hr />
-
-                    <div class="field buttons is-right">
-                        <div class="control">
-                            <button type="submit" class="button is-success">
-                                <span class="icon">
-                                    <i class="fas fa-save"></i>
-                                </span>
-                                <span>Save changes</span>
-                            </button>
-                        </div>
-                    </div>
+                    </footer>
                 </form>
             </div>
-            <button class="modal-close is-large" @click="isModalActive = false"></button>
-        </div>
+        </b-modal>
     </div>
 </template>
-
 
 <script>
 
@@ -126,7 +130,7 @@ export default {
 
     props: ['store'],
 
-    data: function() {
+    data() {
         return {
             groups: [],
             contact: {},
@@ -146,23 +150,24 @@ export default {
         }
     },
 
-    mounted: function() {
+    mounted() {
         this.refresh();
         this.$root.$on('refresh', data => {
             this.groups = data;
+            this.refresh();
         });
     },
 
     methods: {
         refresh() {
             this.store.toArray().then(contacts => {
-                if(this.groups.length) {
-                    contacts.forEach(c => {
-                        c.group = this.groups.filter(function(g) {
-                            return g.id === c.groupId;
-                        })[0].title;
+                contacts.forEach(c => {
+                    let group = this.groups.find(function(g) {
+                        return g.id === c.groupId;
                     });
-                }
+
+                    c.group = group ? group.title : 'N/A';
+                });
 
                 this.contacts = contacts;
             });
