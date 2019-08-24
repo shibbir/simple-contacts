@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="row in groups">
-                                <td>{{row.title}}</td>
+                                <td v-text="row.title"></td>
                                 <td>
                                     <a title="edit" class="modal-button" @click="isModalActive = true, isInsertState = false, group = row">
                                         <span class="icon is-small">
@@ -49,30 +49,34 @@
 
         <b-modal :active.sync="isModalActive" has-modal-card>
             <div class="modal-card">
-                <form @submit.prevent="submit">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Contact Group</p>
-                    </header>
+                <ValidationObserver ref="observer" v-slot="{ validate }">
+                    <form @submit.prevent="validate().then(submit)">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Contact Group</p>
+                        </header>
 
-                    <section class="modal-card-body">
-                        <div class="field">
-                            <label class="label">Title</label>
-                            <div class="control is-clearfix">
-                                <input type="text" class="input" name="group_title" v-model="group.title" v-validate="'required|min:4|max:15'" />
+                        <section class="modal-card-body">
+                            <div class="field">
+                                <label class="label">Title</label>
+                                <ValidationProvider name="group_title" rules="required|min:4|max:15" v-slot="{ errors }">
+                                    <div class="control is-clearfix">
+                                        <input type="text" class="input" v-model="group.title" />
+                                    </div>
+                                    <p class="help is-danger" v-text="errors[0]"></p>
+                                </ValidationProvider>
                             </div>
-                            <p class="help is-danger">{{ errors.first('group_title') }}</p>
-                        </div>
-                    </section>
+                        </section>
 
-                    <footer class="modal-card-foot">
-                        <button type="submit" class="button is-success">
-                            <span class="icon">
-                                <i class="fas fa-save"></i>
-                            </span>
-                            <span>Save changes</span>
-                        </button>
-                    </footer>
-                </form>
+                        <footer class="modal-card-foot">
+                            <button type="submit" class="button is-success">
+                                <span class="icon">
+                                    <i class="fas fa-save"></i>
+                                </span>
+                                <span>Save changes</span>
+                            </button>
+                        </footer>
+                    </form>
+                </ValidationObserver>
             </div>
         </b-modal>
     </div>
@@ -83,7 +87,9 @@
 export default {
     name: 'Group',
 
-    props: ['store'],
+    props: {
+        store: Object
+    },
 
     data() {
         return {
@@ -98,7 +104,7 @@ export default {
         isModalActive: function(val) {
             if(val) {
                 this.$nextTick(() => {
-                    this.$validator.reset();
+                    this.$refs.observer.reset();
                 });
             }
         }
@@ -142,13 +148,8 @@ export default {
         },
 
         submit() {
-            this.$validator.validateAll().then((result) => {
-                if(result) {
-                    if(this.isInsertState) this.create();
-                    else this.update();
-                    return;
-                }
-            });
+            if(this.isInsertState) this.create();
+            else this.update();
         }
     }
 }

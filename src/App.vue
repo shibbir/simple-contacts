@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="columns">
+    <div class="columns">
         <div class="column is-one-third">
             <Group :store="db.groups"/>
         </div>

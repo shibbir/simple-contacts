@@ -27,12 +27,10 @@ export default {
         replace({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        postcss({
-            extensions: [ '.css' ]
-        }),
+        postcss(),
         htmlTemplate({
             template: 'src/index.html',
-            target: 'dist/index.html',
+            target: 'dist/index.html'
         }),
         progress({
             clearLine: false

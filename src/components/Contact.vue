@@ -56,68 +56,83 @@
 
         <b-modal :active.sync="isModalActive" has-modal-card>
             <div class="modal-card">
-                <form @submit.prevent="submit">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Contact</p>
-                    </header>
+                <ValidationObserver ref="observer" v-slot="{ validate }">
+                    <form @submit.prevent="validate().then(submit)">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Contact</p>
+                        </header>
 
-                    <section class="modal-card-body">
-                        <div class="field">
-                            <label class="label">First Name</label>
-                            <div class="control">
-                                <input type="text" name="first_name" class="input" v-model="contact.firstName" v-validate="'required|max:15'" />
+                        <section class="modal-card-body">
+                            <div class="field">
+                                <label class="label">First Name</label>
+                                <ValidationProvider name="first_name" rules="required|max:15" v-slot="{ errors }">
+                                    <div class="control">
+                                        <input type="text" class="input" v-model="contact.firstName" />
+                                    </div>
+                                    <p class="help is-danger" v-text="errors[0]"></p>
+                                </ValidationProvider>
                             </div>
-                            <p class="help is-danger">{{ errors.first('first_name') }}</p>
-                        </div>
-                        <div class="field">
-                            <label class="label">Last Name</label>
-                            <div class="control">
-                                <input type="text" name="last_name" class="input" v-model="contact.lastName" v-validate="'required|max:15'" />
-                            </div>
-                            <p class="help is-danger">{{ errors.first('last_name') }}</p>
-                        </div>
-                        <div class="field">
-                            <label class="label">Mobile</label>
-                            <div class="control">
-                                <input type="text" name="mobile" class="input" v-model="contact.mobile" v-validate="'required'" />
-                            </div>
-                            <p class="help is-danger">{{ errors.first('mobile') }}</p>
-                        </div>
-                        <div class="field">
-                            <label class="label">Email</label>
-                            <div class="control">
-                                <input type="email" name="email" class="input" v-model="contact.email" v-validate="'required|email'" />
-                            </div>
-                            <p class="help is-danger">{{ errors.first('email') }}</p>
-                        </div>
 
-                        <div class="field">
-                            <label class="label">Contact Group</label>
-                            <div class="control">
-                                <div class="select">
-                                    <select name="group" v-model="contact.groupId" v-validate="'required'">
-                                        <option value="">Select group</option>
-                                        <option v-for="group in groups" :value="group.id">{{ group.title }}</option>
-                                    </select>
+                            <div class="field">
+                                <label class="label">Last Name</label>
+                                <ValidationProvider name="last_name" rules="required|max:15" v-slot="{ errors }">
+                                    <div class="control">
+                                        <input type="text" class="input" v-model="contact.lastName" />
+                                    </div>
+                                    <p class="help is-danger" v-text="errors[0]"></p>
+                                </ValidationProvider>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Mobile</label>
+                                <ValidationProvider name="mobile" rules="required" v-slot="{ errors }">
+                                    <div class="control">
+                                        <input type="text" class="input" v-model="contact.mobile" />
+                                    </div>
+                                    <p class="help is-danger" v-text="errors[0]"></p>
+                                </ValidationProvider>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <ValidationProvider name="email" rules="required|email" v-slot="{ errors }">
+                                    <div class="control">
+                                        <input type="email" class="input" v-model="contact.email" />
+                                    </div>
+                                    <p class="help is-danger" v-text="errors[0]"></p>
+                                </ValidationProvider>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Contact Group</label>
+                                <ValidationProvider name="group" rules="required" v-slot="{ errors }">
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="contact.groupId">
+                                                <option value="">Select group</option>
+                                                <option v-for="group in groups" :value="group.id">{{ group.title }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <p class="help is-danger" v-text="errors[0]"></p>
+                                </ValidationProvider>
+                            </div>
+                        </section>
+
+                        <footer class="modal-card-foot">
+                            <div class="field buttons is-right">
+                                <div class="control">
+                                    <button type="submit" class="button is-success">
+                                        <span class="icon">
+                                            <i class="fas fa-save"></i>
+                                        </span>
+                                        <span>Save changes</span>
+                                    </button>
                                 </div>
                             </div>
-                            <p class="help is-danger">{{ errors.first('group') }}</p>
-                        </div>
-                    </section>
-
-                    <footer class="modal-card-foot">
-                        <div class="field buttons is-right">
-                            <div class="control">
-                                <button type="submit" class="button is-success">
-                                    <span class="icon">
-                                        <i class="fas fa-save"></i>
-                                    </span>
-                                    <span>Save changes</span>
-                                </button>
-                            </div>
-                        </div>
-                    </footer>
-                </form>
+                        </footer>
+                    </form>
+                </ValidationObserver>
             </div>
         </b-modal>
     </div>
@@ -128,7 +143,9 @@
 export default {
     name: 'Contact',
 
-    props: ['store'],
+    props: {
+        store: Object
+    },
 
     data() {
         return {
@@ -144,7 +161,7 @@ export default {
         isModalActive: function(val) {
             if(val) {
                 this.$nextTick(() => {
-                    this.$validator.reset();
+                    this.$refs.observer.reset();
                 });
             }
         }
@@ -207,13 +224,8 @@ export default {
         },
 
         submit() {
-            this.$validator.validateAll().then((result) => {
-                if(result) {
-                    if(this.isInsertState) this.create();
-                    else this.update();
-                    return;
-                }
-            });
+            if(this.isInsertState) this.create();
+            else this.update();
         }
     }
 }
