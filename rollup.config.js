@@ -16,9 +16,9 @@ export default {
         format: 'iife'
     },
     plugins: [
-        commonjs(),
         vue(),
         resolve(),
+        commonjs(),
         babel({
             exclude: 'node_modules/**'
         }),
