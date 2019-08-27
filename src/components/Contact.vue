@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="button is-primary modal-button" @click="isModalActive = true, isInsertState = true, contact = {}">
+        <a class="button is-primary modal-button is-outlined" @click="isModalActive = true, isInsertState = true, contact = { groupId: '' }">
             <span class="icon is-small">
                 <i class="fas fa-plus"></i>
             </span>
@@ -65,7 +65,7 @@
                         <section class="modal-card-body">
                             <div class="field">
                                 <label class="label">First Name</label>
-                                <ValidationProvider name="first_name" rules="required|max:15" v-slot="{ errors }">
+                                <ValidationProvider name="first name" rules="required|max:15" v-slot="{ errors }">
                                     <div class="control">
                                         <input type="text" class="input" v-model="contact.firstName" />
                                     </div>
@@ -75,7 +75,7 @@
 
                             <div class="field">
                                 <label class="label">Last Name</label>
-                                <ValidationProvider name="last_name" rules="required|max:15" v-slot="{ errors }">
+                                <ValidationProvider name="last name" rules="required|max:15" v-slot="{ errors }">
                                     <div class="control">
                                         <input type="text" class="input" v-model="contact.lastName" />
                                     </div>
@@ -103,7 +103,7 @@
                                 </ValidationProvider>
                             </div>
 
-                            <div class="field">
+                            <div class="field" v-if="groups && groups.length">
                                 <label class="label">Contact Group</label>
                                 <ValidationProvider name="group" rules="required" v-slot="{ errors }">
                                     <div class="control">
@@ -117,12 +117,19 @@
                                     <p class="help is-danger" v-text="errors[0]"></p>
                                 </ValidationProvider>
                             </div>
+
+                            <b-notification
+                                type="is-warning"
+                                :closable="false"
+                                role="alert">
+                                You don't have any contact groups yet!
+                            </b-notification>
                         </section>
 
                         <footer class="modal-card-foot">
                             <div class="field buttons is-right">
                                 <div class="control">
-                                    <button type="submit" class="button is-success">
+                                    <button type="submit" class="button is-success is-outlined">
                                         <span class="icon">
                                             <i class="fas fa-save"></i>
                                         </span>
@@ -158,7 +165,7 @@ export default {
     },
 
     watch: {
-        isModalActive: function(val) {
+        isModalActive(val) {
             if(val) {
                 this.$nextTick(() => {
                     this.$refs.observer.reset();
@@ -179,11 +186,9 @@ export default {
         refresh() {
             this.store.toArray().then(contacts => {
                 contacts.forEach(c => {
-                    let group = this.groups.find(function(g) {
-                        return g.id === c.groupId;
-                    });
+                    let group = this.groups.find(g => g.id === c.groupId);
 
-                    c.group = group ? group.title : 'N/A';
+                    c.group = group ? group.title : 'Uncategorized';
                 });
 
                 this.contacts = contacts;

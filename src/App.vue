@@ -30,7 +30,7 @@ export default {
         Contact
     },
     data() {
-        return { db }
+        return { db };
     }
 }
 

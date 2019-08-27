@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="button is-primary modal-button" @click="isModalActive = true, isInsertState = true, group = {}">
+        <a class="button is-primary modal-button is-outlined" @click="isModalActive = true, isInsertState = true, group = {}">
             <span class="icon is-small">
                 <i class="fas fa-plus"></i>
             </span>
@@ -58,7 +58,7 @@
                         <section class="modal-card-body">
                             <div class="field">
                                 <label class="label">Title</label>
-                                <ValidationProvider name="group_title" rules="required|min:4|max:15" v-slot="{ errors }">
+                                <ValidationProvider name="title" rules="required|min:4|max:15" v-slot="{ errors }">
                                     <div class="control is-clearfix">
                                         <input type="text" class="input" v-model="group.title" />
                                     </div>
@@ -68,7 +68,7 @@
                         </section>
 
                         <footer class="modal-card-foot">
-                            <button type="submit" class="button is-success">
+                            <button type="submit" class="button is-success is-outlined">
                                 <span class="icon">
                                     <i class="fas fa-save"></i>
                                 </span>
@@ -101,7 +101,7 @@ export default {
     },
 
     watch: {
-        isModalActive: function(val) {
+        isModalActive(val) {
             if(val) {
                 this.$nextTick(() => {
                     this.$refs.observer.reset();
