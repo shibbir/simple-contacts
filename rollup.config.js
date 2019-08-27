@@ -8,7 +8,6 @@ import { terser } from "rollup-plugin-terser";
 import commonjs from 'rollup-plugin-commonjs';
 import progress from 'rollup-plugin-progress';
 import resolve from 'rollup-plugin-node-resolve';
-import sourcemaps from 'rollup-plugin-sourcemaps';
 import htmlTemplate from 'rollup-plugin-generate-html-template';
 
 export default {
@@ -26,12 +25,10 @@ export default {
             exclude: 'node_modules/**'
         }),
         json({
-            exclude: 'node_modules/**',
             preferConst: true,
             compact: true
         }),
         serve('dist'),
-        sourcemaps(),
         terser(),
         replace({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
