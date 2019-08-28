@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="button is-primary modal-button is-outlined" @click="isModalActive = true, isInsertState = true, group = {}">
+        <a class="button is-primary modal-button" @click="isModalActive = true, isInsertState = true, group = {}">
             <span class="icon is-small">
                 <i class="fas fa-plus"></i>
             </span>
@@ -33,7 +33,7 @@
                                             <i class="far fa-edit"></i>
                                         </span>
                                     </a>
-                                    <a title="delete" @click="remove(row.id)">
+                                    <a title="delete" @click="confirmDelete(row.id)">
                                         <span class="icon has-text-danger">
                                             <i class="fas fa-ban"></i>
                                         </span>
@@ -49,8 +49,8 @@
 
         <b-modal :active.sync="isModalActive" has-modal-card>
             <div class="modal-card">
-                <ValidationObserver ref="observer" v-slot="{ validate }">
-                    <form @submit.prevent="validate().then(submit)">
+                <ValidationObserver ref="observer" v-slot="{ passes }">
+                    <form @submit.prevent="passes(submit)">
                         <header class="modal-card-head">
                             <p class="modal-card-title">Contact Group</p>
                         </header>
@@ -68,10 +68,7 @@
                         </section>
 
                         <footer class="modal-card-foot">
-                            <button type="submit" class="button is-success is-outlined">
-                                <span class="icon">
-                                    <i class="fas fa-save"></i>
-                                </span>
+                            <button type="submit" class="button is-success">
                                 <span>Save changes</span>
                             </button>
                         </footer>
@@ -141,10 +138,25 @@ export default {
             }).catch(error => console.error(error));
         },
 
-        remove(id) {
-            if(confirm('Are you sure?')) {
-                this.store.delete(id).then(() => this.refresh());
-            }
+        confirmDelete(id) {
+            this.$buefy.dialog.confirm({
+                title: 'Deleting group',
+                message: 'Are you sure you want to <b>delete</b> this group? This action cannot be undone.',
+                confirmText: 'Delete Group',
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'fa-exclamation-circle',
+                iconPack: 'fas',
+                onConfirm: () => {
+                    this.store.delete(id).then(() => {
+                        this.$buefy.toast.open({
+                            message: 'Group deleted!',
+                            type: 'is-info'
+                        });
+                        this.refresh();
+                    });
+                }
+            })
         },
 
         submit() {

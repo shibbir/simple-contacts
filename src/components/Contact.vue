@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="button is-primary modal-button is-outlined" @click="isModalActive = true, isInsertState = true, contact = { groupId: '' }">
+        <a class="button is-primary modal-button" @click="isModalActive = true, isInsertState = true, contact = { groupId: '' }">
             <span class="icon is-small">
                 <i class="fas fa-plus"></i>
             </span>
@@ -39,7 +39,7 @@
                                             <i class="far fa-edit"></i>
                                         </span>
                                     </a>
-                                    <a title="delete" @click="remove(row.id)">
+                                    <a title="delete" @click="confirmDelete(row.id)">
                                         <span class="icon has-text-danger">
                                             <i class="fas fa-ban"></i>
                                         </span>
@@ -56,8 +56,8 @@
 
         <b-modal :active.sync="isModalActive" has-modal-card>
             <div class="modal-card">
-                <ValidationObserver ref="observer" v-slot="{ validate }">
-                    <form @submit.prevent="validate().then(submit)">
+                <ValidationObserver ref="observer" v-slot="{ passes }">
+                    <form @submit.prevent="passes(submit)">
                         <header class="modal-card-head">
                             <p class="modal-card-title">Contact</p>
                         </header>
@@ -119,6 +119,7 @@
                             </div>
 
                             <b-notification
+                                v-if="!groups || !groups.length"
                                 type="is-warning"
                                 :closable="false"
                                 role="alert">
@@ -130,9 +131,6 @@
                             <div class="field buttons is-right">
                                 <div class="control">
                                     <button type="submit" class="button is-success is-outlined">
-                                        <span class="icon">
-                                            <i class="fas fa-save"></i>
-                                        </span>
                                         <span>Save changes</span>
                                     </button>
                                 </div>
@@ -222,10 +220,25 @@ export default {
             }).catch(error => console.error(error));
         },
 
-        remove(id) {
-            if(confirm('Are you sure?')) {
-                this.store.delete(id).then(() => this.refresh());
-            }
+        confirmDelete(id) {
+            this.$buefy.dialog.confirm({
+                title: 'Deleting contact',
+                message: 'Are you sure you want to <b>delete</b> this contact? This action cannot be undone.',
+                confirmText: 'Delete Contact',
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'fa-exclamation-circle',
+                iconPack: 'fas',
+                onConfirm: () => {
+                    this.store.delete(id).then(() => {
+                        this.$buefy.toast.open({
+                            message: 'Contact deleted!',
+                            type: 'is-info'
+                        });
+                        this.refresh();
+                    });
+                }
+            })
         },
 
         submit() {

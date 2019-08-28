@@ -4,7 +4,7 @@ import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import replace from 'rollup-plugin-replace';
 import postcss from 'rollup-plugin-postcss';
-import { terser } from "rollup-plugin-terser";
+import { terser } from 'rollup-plugin-terser';
 import commonjs from 'rollup-plugin-commonjs';
 import progress from 'rollup-plugin-progress';
 import resolve from 'rollup-plugin-node-resolve';
