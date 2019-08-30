@@ -125,6 +125,10 @@ export default {
             }).then(() => {
                 this.refresh();
                 this.isModalActive = false;
+                this.$buefy.toast.open({
+                    message: 'New contact group created!',
+                    type: 'is-info'
+                });
             }).catch(error => console.error(error));
         },
 
