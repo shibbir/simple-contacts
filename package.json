@@ -14,7 +14,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
     "buefy": "^0.8.2",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "vee-validate": "^3.0.3",
     "vue": "^2.6.10"
   },
